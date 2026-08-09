@@ -138,7 +138,7 @@
     footer{margin-top:22px;color:var(--muted);font-size:.79rem;text-align:center}
 
 
-    .school-participation-card{padding-bottom:20px}
+    .school-participation-card{padding:16px 18px 14px}
 
 
 
@@ -204,10 +204,10 @@
     }
     .school-summary-label{font-weight:800;margin-bottom:2px}
     .school-summary-text{color:var(--muted);font-size:.9rem;line-height:1.4}
-    .school-bars{display:grid;gap:9px;margin-top:8px}
+    .school-bars{display:grid;gap:6px;margin-top:6px}
     .school-row{
       display:grid;grid-template-columns:minmax(205px,1.8fr) 86px 86px minmax(150px,2.5fr) 64px;
-      gap:10px;align-items:center;padding:8px 10px;border-bottom:1px solid #edf1f5
+      gap:8px;align-items:center;padding:6px 8px;border-bottom:1px solid #edf1f5
     }
     .school-row:nth-child(even){background:#fbfcfd;border-radius:10px}
     .school-name{font-size:.9rem;font-weight:700}
@@ -332,7 +332,8 @@
         flex:1;min-height:0;
         display:grid;
         grid-template-columns:minmax(0,1.12fr) minmax(0,.88fr);
-        gap:12px
+        grid-template-rows:auto auto minmax(0,1fr);
+        gap:10px 12px
       }
       #schoolsView[hidden]{display:none!important}
       #schoolsView > .section{
@@ -371,6 +372,75 @@
       body{overflow:auto}
       .header-actions{width:100%;justify-content:space-between;flex-wrap:wrap}
       .fullscreen-btn{padding:9px 11px}
+    }
+
+  
+    .podium-section{
+      background:var(--panel);border:1px solid var(--border);border-radius:18px;
+      box-shadow:var(--shadow);padding:18px 20px;margin:0 0 18px
+    }
+    .podium-head{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;margin-bottom:12px}
+    .podium-head h2{margin:0;font-size:1.08rem}
+    .podium-head p{margin:4px 0 0;color:var(--muted);font-size:.8rem}
+    .podium-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+    .podium-card{
+      border:1px solid var(--border);border-radius:16px;padding:14px 15px;background:#fff;
+      display:grid;grid-template-columns:auto 1fr auto;gap:11px;align-items:center;min-width:0
+    }
+    .podium-medal{font-size:2rem;line-height:1}
+    .podium-name{font-size:.84rem;font-weight:850;line-height:1.25;min-width:0}
+    .podium-detail{font-size:.72rem;color:var(--muted);margin-top:3px}
+    .podium-gain{
+      font-size:1.15rem;font-weight:900;color:var(--positive);white-space:nowrap
+    }
+    .podium-card.gold{background:linear-gradient(180deg,#fffdf5,#fff)}
+    .podium-card.silver{background:linear-gradient(180deg,#f8fafc,#fff)}
+    .podium-card.bronze{background:linear-gradient(180deg,#fff9f4,#fff)}
+
+    @media(max-width:760px){
+      .podium-grid{grid-template-columns:1fr}
+      .podium-section{padding:15px}
+    }
+
+    @media(min-width:901px){
+      #municipalView{
+        grid-template-columns:minmax(0,.92fr) minmax(0,1.28fr);
+        grid-template-rows:auto auto minmax(0,1fr);
+      }
+      #schoolsView > .podium-section{
+        grid-column:1 / -1;margin:0;padding:11px 14px;border-radius:17px
+      }
+      .podium-head{margin-bottom:8px}
+      .podium-head h2{font-size:.93rem}
+      .podium-head p{font-size:.68rem}
+      .podium-grid{gap:8px}
+      .podium-card{padding:9px 10px;gap:8px;border-radius:13px}
+      .podium-medal{font-size:1.55rem}
+      .podium-name{font-size:.72rem}
+      .podium-detail{font-size:.64rem}
+      .podium-gain{font-size:.98rem}
+    }
+
+  
+    .school-global-tabs{
+      grid-column:1 / -1;
+      display:flex;
+      justify-content:flex-start;
+      align-items:center;
+      gap:6px;
+      padding:5px;
+      width:max-content;
+      max-width:100%;
+      background:#e8eef4;
+      border-radius:12px;
+      margin:0;
+    }
+
+    @media(max-width:900px){
+      .school-global-tabs{
+        margin-bottom:2px;
+        overflow-x:auto;
+      }
     }
 
   </style>
@@ -451,6 +521,21 @@
   </div>
 
   <div id="schoolsView" hidden>
+    <div class="school-global-tabs" role="tablist" aria-label="Etapa das informações por escola">
+      <button class="school-subtab active" data-school-stage="quinto" role="tab" aria-selected="true">Anos Iniciais</button>
+      <button class="school-subtab" data-school-stage="nono" role="tab" aria-selected="false">Anos Finais</button>
+    </div>
+
+    <section class="podium-section" id="podiumSection">
+      <div class="podium-head">
+        <div>
+          <h2>Maiores evoluções por escola · 2023–2025</h2>
+          <p>Somente escolas com resultado divulgado nos dois anos.</p>
+        </div>
+      </div>
+      <div class="podium-grid" id="podiumGrid"></div>
+    </section>
+
     <section class="section school-participation-card">
       <div class="section-head">
         <div>
@@ -459,16 +544,10 @@
         </div>
         <div class="mini-legend"><span class="legend-dot"></span>Taxa de participação</div>
       </div>
-
-      <div class="school-subtabs" id="participationTabs" role="tablist" aria-label="Etapa da participação">
-        <button class="school-subtab active" data-participation-grade="quinto" role="tab" aria-selected="true">Anos Iniciais</button>
-        <button class="school-subtab" data-participation-grade="nono" role="tab" aria-selected="false">Anos Finais</button>
-      </div>
-
-      <div class="school-summary">
+<div class="school-summary">
         <div class="school-summary-number" id="schoolCount">13</div>
         <div>
-          <div class="school-summary-label" id="schoolSummaryLabel">Escolas dos Anos Iniciais com notas disponíveis</div>
+          <div class="school-summary-label" id="schoolSummaryLabel">escolas dos Anos Iniciais no recorte</div>
           <div class="school-summary-text">A participação elevada aumenta a representatividade do resultado do Saeb e, consequentemente, a confiabilidade da leitura do IDEB.</div>
         </div>
       </div>
@@ -484,9 +563,7 @@
 
         <article class="school-note important">
           <div class="attention-kicker"><span class="attention-icon" aria-hidden="true">⚠️</span><span>Por que esse dado é relevante?</span></div>
-          <p>O desempenho médio é mais preciso quando há uma alta taxa de participação. Uma participação baixa pode criar <strong>viés de seleção</strong>: se alunos de menor desempenho deixam de fazer a prova, a média observada pode ficar artificialmente acima da aprendizagem real, e em muitas redes isso ocorre de forma intencional, algo que <strong>não aconteceu em Lagoa Santa, onde a participação foi alta na maioria das escolas</strong>. A participação próxima de 100% reduz esse risco e torna a comparação entre escolas e redes mais robusta.</p>
-          <p class="note-small">No Saeb 2025, o Inep estabelece participação mínima de 80% dos estudantes matriculados, além de pelo menos 10 presentes, para divulgação do resultado por escola.</p>
-          <a href="https://www.gov.br/inep/pt-br/acesso-a-informacao/perguntas-frequentes/sistema-de-avaliacao-da-educacao-basica-saeb" target="_blank" rel="noreferrer">Critério oficial: Inep</a>
+          <p>Além de uma alta frequência garantir o cumprimento da Condicionalidade II do VAAR, o desempenho médio é mais preciso quando há uma alta taxa de participação. Uma participação baixa pode criar <strong>viés de seleção</strong>: se alunos de menor desempenho deixam de fazer a prova, a média observada pode ficar artificialmente acima da aprendizagem real, e em muitas redes isso ocorre de forma intencional, algo que <strong>não aconteceu em Lagoa Santa, onde a participação foi alta na maioria das escolas</strong>. A participação próxima de 100% reduz esse risco e torna a comparação entre escolas e redes mais robusta.</p>
         </article>
       </div>
 
@@ -503,13 +580,7 @@
         </div>
         <div class="mini-legend">2021 · 2023 · 2025</div>
       </div>
-
-      <div class="school-subtabs" id="trendTabs" role="tablist" aria-label="Etapa da evolução do IDEB">
-        <button class="school-subtab active" data-trend-grade="quinto" role="tab" aria-selected="true">Anos Iniciais</button>
-        <button class="school-subtab" data-trend-grade="nono" role="tab" aria-selected="false">Anos Finais</button>
-      </div>
-
-      <div class="school-select-wrap">
+<div class="school-select-wrap">
         <label for="schoolSelect" class="school-select-label">Selecione a escola</label>
         <select id="schoolSelect" class="school-select" aria-label="Selecione uma escola"></select>
       </div>
@@ -568,8 +639,7 @@ const SCHOOL_PARTICIPATION = {
   ]
 };
 
-let participationGrade = "quinto";
-let trendGrade = "quinto";
+let schoolStage = "quinto";
 
 
 
@@ -691,8 +761,8 @@ function renderSchoolResults(){
 
   section.hidden = false;
 
-  const raw = trendGrade === "quinto" ? SCHOOL_IDEB_5 : SCHOOL_IDEB_9;
-  const gradeLabel = trendGrade === "quinto" ? "Anos Iniciais" : "Anos Finais";
+  const raw = schoolStage === "quinto" ? SCHOOL_IDEB_5 : SCHOOL_IDEB_9;
+  const gradeLabel = schoolStage === "quinto" ? "Anos Iniciais" : "Anos Finais";
 
   document.getElementById("schoolTrendTitle").textContent = `Evolução do IDEB por escola · ${gradeLabel}`;
   document.getElementById("schoolTrendDesc").textContent =
@@ -702,10 +772,10 @@ function renderSchoolResults(){
     .filter(s=>[2021,2023,2025].some(y=>s.values[y] !== null))
     .sort((a,b)=>a.name.localeCompare(b.name,"pt-BR",{sensitivity:"base"}));
 
-  let selectedSchool = selectedSchoolByGrade[trendGrade];
+  let selectedSchool = selectedSchoolByGrade[schoolStage];
   if(!schools.some(s=>s.name===selectedSchool)){
     selectedSchool = schools[0]?.name || "";
-    selectedSchoolByGrade[trendGrade] = selectedSchool;
+    selectedSchoolByGrade[schoolStage] = selectedSchool;
   }
 
   const select = document.getElementById("schoolSelect");
@@ -714,7 +784,7 @@ function renderSchoolResults(){
   ).join("");
 
   select.onchange = ()=>{
-    selectedSchoolByGrade[trendGrade] = select.value;
+    selectedSchoolByGrade[schoolStage] = select.value;
     drawSchoolTrend(schools.find(s=>s.name===select.value) || schools[0]);
   };
 
@@ -812,13 +882,13 @@ function drawSchoolTrend(school){
 
 function renderSchools(){
   const root = document.getElementById("schoolParticipation");
-  const rows = [...SCHOOL_PARTICIPATION[participationGrade]].sort((a,b)=>
+  const rows = [...SCHOOL_PARTICIPATION[schoolStage]].sort((a,b)=>
     a[0].localeCompare(b[0],"pt-BR",{sensitivity:"base"})
   );
 
   document.getElementById("schoolCount").textContent = rows.length;
   document.getElementById("schoolSummaryLabel").textContent =
-    `Escolas dos ${participationGrade === "quinto" ? "Anos Iniciais" : "Anos Finais"} com notas disponíveis`;
+    `escolas dos ${schoolStage === "quinto" ? "Anos Iniciais" : "Anos Finais"} no recorte`;
 
   root.innerHTML = rows.map(([name,enrolled,present])=>{
     const rate = (present/enrolled)*100;
@@ -835,12 +905,47 @@ function renderSchools(){
   }).join("");
 }
 
+
+function getSchoolPodium(){
+  const source = schoolStage === "quinto" ? SCHOOL_IDEB_5 : SCHOOL_IDEB_9;
+  return source
+    .filter(s => s.values[2023] !== null && s.values[2025] !== null)
+    .map(s => ({
+      name: s.name,
+      v2023: s.values[2023],
+      v2025: s.values[2025],
+      delta: +(s.values[2025] - s.values[2023]).toFixed(1)
+    }))
+    .sort((a,b) => b.delta - a.delta || a.name.localeCompare(b.name,"pt-BR",{sensitivity:"base"}))
+    .slice(0,3);
+}
+
+function renderPodium(){
+  const root = document.getElementById("podiumGrid");
+  if(!root) return;
+  const podium = getSchoolPodium();
+  const medals = ["🥇","🥈","🥉"];
+  const classes = ["gold","silver","bronze"];
+
+  root.innerHTML = podium.map((s,i)=>`
+    <article class="podium-card ${classes[i]}">
+      <div class="podium-medal" aria-hidden="true">${medals[i]}</div>
+      <div>
+        <div class="podium-name">${s.name}</div>
+        <div class="podium-detail">${fmt(s.v2023)} → ${fmt(s.v2025)}</div>
+      </div>
+      <div class="podium-gain">${s.delta > 0 ? "+" : ""}${fmt(s.delta)}</div>
+    </article>
+  `).join("");
+}
+
 function render(){
   const municipal = document.getElementById("municipalView");
   const schools = document.getElementById("schoolsView");
   if(stage === "escolas"){
     municipal.hidden = true;
     schools.hidden = false;
+    renderPodium();
     renderSchools();
     renderSchoolResults();
     return;
@@ -860,6 +965,7 @@ function render(){
   const rmbhGain = d.rmbhRank2023 - d.rmbhRank2025;
   document.getElementById("heroRmbhNote").textContent =
     `Lagoa Santa avançou ${rmbhGain} posições entre 2023 e 2025, em um universo de ${d.rmbhTotal} municípios.`;
+
 
   const vetorSorted = [...d.vetor].sort((a,b)=>{
     const scoreDiff = b[2]-a[2];
@@ -923,30 +1029,23 @@ document.getElementById("searchRank").addEventListener("input",()=>{
   if(stage !== "escolas") renderRanking();
 });
 
-document.querySelectorAll("[data-participation-grade]").forEach(btn=>{
-  btn.addEventListener("click",()=>{
-    participationGrade = btn.dataset.participationGrade;
-    document.querySelectorAll("[data-participation-grade]").forEach(b=>{
-      const active = b===btn;
-      b.classList.toggle("active",active);
-      b.setAttribute("aria-selected",active?"true":"false");
-    });
-    renderSchools();
-  });
-});
 
-document.querySelectorAll("[data-trend-grade]").forEach(btn=>{
+document.querySelectorAll("[data-school-stage]").forEach(btn=>{
   btn.addEventListener("click",()=>{
-    trendGrade = btn.dataset.trendGrade;
-    document.querySelectorAll("[data-trend-grade]").forEach(b=>{
-      const active = b===btn;
-      b.classList.toggle("active",active);
-      b.setAttribute("aria-selected",active?"true":"false");
+    schoolStage = btn.dataset.schoolStage;
+
+    document.querySelectorAll("[data-school-stage]").forEach(b=>{
+      const active = b === btn;
+      b.classList.toggle("active", active);
+      b.setAttribute("aria-selected", active ? "true" : "false");
     });
+
+    // Um único clique atualiza toda a aba Por Escola.
+    renderPodium();
+    renderSchools();
     renderSchoolResults();
   });
 });
-
 
 const fullscreenBtn = document.getElementById("fullscreenBtn");
 if(fullscreenBtn){
