@@ -468,7 +468,7 @@
       <div class="school-summary">
         <div class="school-summary-number" id="schoolCount">13</div>
         <div>
-          <div class="school-summary-label" id="schoolSummaryLabel">escolas dos Anos Iniciais no recorte</div>
+          <div class="school-summary-label" id="schoolSummaryLabel">Escolas dos Anos Iniciais com notas disponíveis</div>
           <div class="school-summary-text">A participação elevada aumenta a representatividade do resultado do Saeb e, consequentemente, a confiabilidade da leitura do IDEB.</div>
         </div>
       </div>
@@ -818,7 +818,7 @@ function renderSchools(){
 
   document.getElementById("schoolCount").textContent = rows.length;
   document.getElementById("schoolSummaryLabel").textContent =
-    `escolas dos ${participationGrade === "quinto" ? "Anos Iniciais" : "Anos Finais"} no recorte`;
+    `Escolas dos ${participationGrade === "quinto" ? "Anos Iniciais" : "Anos Finais"} com notas disponíveis`;
 
   root.innerHTML = rows.map(([name,enrolled,present])=>{
     const rate = (present/enrolled)*100;
