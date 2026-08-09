@@ -246,7 +246,7 @@
       .section-head{align-items:flex-start;flex-direction:column}
       .tools{width:100%}.search{width:100%;min-width:0}
       .table-scroll{overflow-x:auto}
-      .north-table{min-width:590px}
+      .north-table{min-width:680px}
       .bar-row{grid-template-columns:28px minmax(105px,1.2fr) minmax(75px,2fr) 40px;gap:7px;padding-inline:4px}
       .school-bars{overflow-x:auto}
       .school-row{min-width:690px}
@@ -489,14 +489,14 @@
     <div class="section-head">
       <div>
         <h2>Vetor Norte · evolução 2023–2025</h2>
-        <p class="section-desc">Comparação dos municípios informados, com destaque para Lagoa Santa.</p>
+        
       </div>
       <div class="mini-legend"><span class="legend-dot"></span>Lagoa Santa</div>
     </div>
     <div class="table-scroll">
       <table class="north-table">
         <thead>
-          <tr><th>Município</th><th class="num">2023</th><th class="num">2025</th><th class="num">Variação</th></tr>
+          <tr><th class="num"></th><th>Município</th><th class="num">2023</th><th class="num">2025</th><th class="num">Variação</th></tr>
         </thead>
         <tbody id="northBody"></tbody>
       </table>
@@ -508,7 +508,7 @@
     <div class="section-head">
       <div>
         <h2>Ranking da RMBH · 2025</h2>
-        <p class="section-desc">Posições por nota, preservando empates conforme os dados enviados.</p>
+       
       </div>
       <div class="tools">
         <input class="search" id="searchRank" type="search" placeholder="Buscar município…" aria-label="Buscar município no ranking">
@@ -563,7 +563,7 @@
 
         <article class="school-note important">
           <div class="attention-kicker"><span class="attention-icon" aria-hidden="true">⚠️</span><span>Por que esse dado é relevante?</span></div>
-          <p>Além de uma alta frequência <strong>garantir o cumprimento da Condicionalidade II do VAAR</strong>, o desempenho médio é mais preciso quando há uma alta taxa de participação. Uma participação baixa pode criar <strong>viés de seleção</strong>: se alunos de menor desempenho deixam de fazer a prova, a média observada pode ficar artificialmente acima da aprendizagem real, e em muitas redes isso ocorre de forma intencional, algo que <strong>não aconteceu em Lagoa Santa, onde a participação foi alta na maioria das escolas</strong>. A participação próxima de 100% reduz esse risco e torna a comparação entre escolas e redes mais robusta.</p>
+          <p>Além de uma alta frequência garantir o cumprimento da Condicionalidade II do VAAR, o desempenho médio é mais preciso quando há uma alta taxa de participação. Uma participação baixa pode criar <strong>viés de seleção</strong>: se alunos de menor desempenho deixam de fazer a prova, a média observada pode ficar artificialmente acima da aprendizagem real, e em muitas redes isso ocorre de forma intencional, algo que <strong>não aconteceu em Lagoa Santa, onde a participação foi alta na maioria das escolas</strong>. A participação próxima de 100% reduz esse risco e torna a comparação entre escolas e redes mais robusta.</p>
         </article>
       </div>
 
@@ -974,13 +974,26 @@ function render(){
     if(b[0] === "Lagoa Santa" && a[0] !== "Lagoa Santa") return 1;
     return a[0].localeCompare(b[0],"pt-BR",{sensitivity:"base"});
   });
-  document.getElementById("northBody").innerHTML = vetorSorted.map(([name,v23,v25])=>{
+
+  let vetorPrevScore = null;
+  let vetorRank = 0;
+  const vetorRanked = vetorSorted.map((item,i)=>{
+    if(item[2] !== vetorPrevScore) vetorRank = i+1;
+    vetorPrevScore = item[2];
+    return [...item, vetorRank];
+  });
+
+  document.getElementById("northBody").innerHTML = vetorRanked.map(([name,v23,v25,rank])=>{
     const ch = +(v25-v23).toFixed(1);
     const cls = ch>0 ? "chg" : ch<0 ? "down" : "flat";
     const s = ch>0 ? `+${fmt(ch)}` : fmt(ch);
     return `<tr class="${name==="Lagoa Santa"?"lagoa":""}">
-      <td>${name}</td><td class="num">${fmt(v23)}</td><td class="num">${fmt(v25)}</td>
-      <td class="num ${cls}">${s}</td></tr>`;
+      <td class="num"><strong>${rank}º</strong></td>
+      <td>${name}</td>
+      <td class="num">${fmt(v23)}</td>
+      <td class="num">${fmt(v25)}</td>
+      <td class="num ${cls}">${s}</td>
+    </tr>`;
   }).join("");
   document.getElementById("northNote").innerHTML = stage==="iniciais"
     ? "Leitura principal: Lagoa Santa melhorou <strong>0,3 ponto</strong> e avançou do <strong>6º para o 3º lugar</strong> no Vetor Norte."
