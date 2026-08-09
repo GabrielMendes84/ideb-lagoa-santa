@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>IDEB Lagoa Santa — Dashboard 2025</title>
+  <style>
+    :root{
+      --bg:#f4f7fb;
+      --panel:#ffffff;
+      --text:#152033;
+      --muted:#677489;
+      --border:#dce4ef;
+      --primary:#1b5e7a;
+      --primary-2:#2d7f9d;
+      --accent:#d4a72c;
+      --positive:#16784b;
+      --positive-bg:#eaf7f0;
+      --soft:#eef4f8;
+      --ls:#e8f3f7;
+      --shadow:0 10px 28px rgba(25, 49, 72, .08);
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      background:linear-gradient(180deg,#edf4f8 0,#f7f9fc 260px,#f4f7fb 100%);
+      color:var(--text);
+      font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    .wrap{max-width:1220px;margin:0 auto;padding:28px 22px 54px}
+    header{
+      display:flex;justify-content:space-between;gap:24px;align-items:flex-end;
+      margin-bottom:20px;
+    }
+    .eyebrow{
+      font-size:.76rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;
+      color:var(--primary);
+    }
+    h1{margin:.35rem 0 .3rem;font-size:clamp(1.9rem,3vw,3.1rem);line-height:1.02}
+    .subtitle{margin:0;color:var(--muted);font-size:1rem}
+    .stamp{
+      border:1px solid var(--border);background:rgba(255,255,255,.8);backdrop-filter:blur(8px);
+      border-radius:14px;padding:10px 13px;color:var(--muted);font-size:.85rem;white-space:nowrap
+    }
+
+    .tabs{
+      display:inline-flex;gap:6px;padding:5px;background:#e8eef4;border-radius:14px;margin:8px 0 22px;
+    }
+    .tab{
+      appearance:none;border:0;background:transparent;color:var(--muted);padding:10px 16px;
+      border-radius:10px;font-weight:750;cursor:pointer;font-size:.95rem;
+    }
+    .tab.active{background:#fff;color:var(--primary);box-shadow:0 3px 12px rgba(30,60,90,.09)}
+    .tab:focus-visible{outline:3px solid rgba(45,127,157,.25);outline-offset:2px}
+
+    .hero{
+      display:grid;grid-template-columns:1.55fr .82fr .82fr;gap:18px;margin-bottom:18px;
+    }
+    .hero-main,.hero-side,.section{
+      background:var(--panel);border:1px solid var(--border);border-radius:22px;box-shadow:var(--shadow)
+    }
+    .hero-main{padding:26px}
+    .hero-side{padding:24px;display:flex;flex-direction:column;justify-content:center;min-height:100%}
+    .hero-label{color:var(--muted);font-size:.85rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em}
+    .hero-value{font-size:clamp(3.6rem,7vw,6.2rem);font-weight:850;line-height:.92;margin:10px 0 12px;color:var(--primary)}
+    .delta{
+      display:inline-flex;align-items:center;gap:7px;width:max-content;border-radius:999px;
+      background:var(--positive-bg);color:var(--positive);padding:7px 10px;font-size:.86rem;font-weight:800
+    }
+    .hero-copy{margin:14px 0 0;font-size:1.05rem;line-height:1.55;max-width:760px}
+    .side-big{font-size:2.15rem;font-weight:850;margin:8px 0;color:var(--text)}
+    .side-note{color:var(--muted);line-height:1.45}
+
+    .cards{
+      display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:26px;
+    }
+    .card{
+      background:var(--panel);border:1px solid var(--border);border-radius:18px;padding:18px 18px 0;
+      box-shadow:0 6px 18px rgba(25,49,72,.055);min-height:210px;display:flex;flex-direction:column
+    }
+    .card-label{font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:800}
+    .card-value{font-size:2.2rem;font-weight:850;margin:8px 0 2px;color:var(--text)}
+    .card-sub{color:var(--muted);font-size:.92rem;line-height:1.35;margin-bottom:14px}
+    .card-note{
+      margin-top:auto;margin-left:-18px;margin-right:-18px;padding:13px 18px 15px;
+      border-top:1px solid var(--border);background:#fafbfd;border-radius:0 0 18px 18px;
+      font-size:.83rem;line-height:1.4;color:#4c5b70
+    }
+    .card-note strong{color:var(--positive)}
+
+    .section{padding:22px;margin-top:18px}
+    .section-head{
+      display:flex;justify-content:space-between;gap:18px;align-items:flex-end;margin-bottom:16px
+    }
+    .section h2{margin:0;font-size:1.3rem}
+    .section-desc{margin:4px 0 0;color:var(--muted);font-size:.92rem}
+    .mini-legend{color:var(--muted);font-size:.8rem;text-align:right}
+    .legend-dot{display:inline-block;width:10px;height:10px;border-radius:999px;background:var(--primary);margin-right:5px}
+
+    .north-table,.rank-table{width:100%;border-collapse:collapse}
+    .north-table th,.north-table td,.rank-table th,.rank-table td{
+      text-align:left;padding:11px 12px;border-bottom:1px solid #edf1f5;font-size:.91rem
+    }
+    .north-table th,.rank-table th{
+      color:var(--muted);font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;font-weight:800
+    }
+    .north-table td.num,.north-table th.num,.rank-table td.num,.rank-table th.num{text-align:right;font-variant-numeric:tabular-nums}
+    tr.lagoa td{background:var(--ls);font-weight:750}
+    tr.lagoa td:first-child{box-shadow:inset 4px 0 0 var(--primary)}
+    .chg{font-weight:800;color:var(--positive)}
+    .flat{color:var(--muted);font-weight:700}
+    .down{color:#9b5b24;font-weight:800}
+
+    .bars{display:grid;gap:9px}
+    .bar-row{
+      display:grid;grid-template-columns:34px minmax(150px,1.4fr) minmax(120px,3fr) 48px;
+      gap:10px;align-items:center;padding:5px 8px;border-radius:10px
+    }
+    .bar-row.lagoa{background:var(--ls);font-weight:750}
+    .rank{color:var(--muted);font-size:.84rem;text-align:right}
+    .name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:.9rem}
+    .track{height:10px;background:#e7edf3;border-radius:999px;overflow:hidden}
+    .fill{height:100%;border-radius:999px;background:#90a7b5}
+    .bar-row.lagoa .fill{background:var(--primary)}
+    .score{text-align:right;font-weight:800;font-variant-numeric:tabular-nums}
+
+    .tools{display:flex;gap:10px;align-items:center}
+    .search{
+      border:1px solid var(--border);border-radius:10px;background:#fff;padding:9px 11px;min-width:220px;
+      color:var(--text);font:inherit
+    }
+    .search:focus{outline:3px solid rgba(45,127,157,.18);border-color:var(--primary-2)}
+
+    .footnote{
+      margin-top:18px;padding:13px 15px;background:var(--soft);border-radius:12px;color:var(--muted);
+      font-size:.83rem;line-height:1.45
+    }
+    footer{margin-top:22px;color:var(--muted);font-size:.79rem;text-align:center}
+
+
+    .school-participation-card{padding-bottom:20px}
+
+
+
+
+    .school-select-wrap{max-width:520px;margin:2px 0 20px}
+    .school-select-label{
+      display:block;margin-bottom:6px;color:var(--muted);font-size:.79rem;
+      font-weight:800;text-transform:uppercase;letter-spacing:.05em
+    }
+    .school-select{
+      width:100%;border:1px solid var(--border);border-radius:12px;background:#fff;
+      color:var(--text);padding:11px 12px;font:inherit;font-size:.92rem;cursor:pointer
+    }
+    .school-select:focus{
+      outline:3px solid rgba(45,127,157,.18);border-color:var(--primary-2)
+    }
+    .trend-header{
+      display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin:6px 0 10px
+    }
+    .trend-school{font-size:1.12rem;font-weight:850}
+    .trend-summary{font-size:.85rem;color:var(--muted);margin-top:4px}
+    .trend-badge{
+      white-space:nowrap;border-radius:999px;background:var(--positive-bg);color:var(--positive);
+      padding:7px 10px;font-size:.8rem;font-weight:850
+    }
+    .trend-badge.down{background:#f8eee5;color:#9b5b24}
+    .trend-badge.neutral{background:var(--soft);color:var(--muted)}
+    .trend-chart-wrap{width:100%;overflow:hidden}
+    #idebTrendChart{display:block;width:100%;height:auto;min-height:260px}
+    .chart-grid-line{stroke:#dfe7ee;stroke-width:1}
+    .chart-axis-label{fill:#738196;font-size:12px}
+    .chart-value-label{fill:var(--text);font-size:13px;font-weight:800}
+    .chart-line{
+      fill:none;stroke:var(--primary);stroke-width:4;stroke-linecap:round;stroke-linejoin:round;
+      stroke-dasharray:1200;stroke-dashoffset:1200;animation:drawLine .9s ease forwards
+    }
+    .chart-point{
+      fill:#fff;stroke:var(--primary);stroke-width:4;transform-origin:center;
+      opacity:0;animation:popPoint .35s ease forwards
+    }
+    .chart-empty{fill:var(--muted);font-size:16px;font-weight:750}
+    @keyframes drawLine{to{stroke-dashoffset:0}}
+    @keyframes popPoint{from{opacity:0;transform:scale(.4)}to{opacity:1;transform:scale(1)}}
+
+    .school-subtabs{
+      display:inline-flex;gap:6px;padding:5px;background:#e8eef4;border-radius:12px;margin:0 0 16px;
+      max-width:100%;overflow-x:auto
+    }
+    .school-subtab{
+      appearance:none;border:0;background:transparent;color:var(--muted);padding:8px 14px;
+      border-radius:9px;font-weight:750;cursor:pointer;font-size:.9rem
+    }
+    .school-subtab.active{background:#fff;color:var(--primary);box-shadow:0 3px 10px rgba(30,60,90,.08)}
+    .school-subtab:focus-visible{outline:3px solid rgba(45,127,157,.25);outline-offset:2px}
+
+    .school-summary{
+      display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center;
+      padding:14px 16px;background:var(--soft);border-radius:14px;margin:6px 0 18px
+    }
+    .school-summary-number{
+      width:54px;height:54px;border-radius:14px;background:var(--primary);color:white;
+      display:grid;place-items:center;font-size:1.5rem;font-weight:850
+    }
+    .school-summary-label{font-weight:800;margin-bottom:2px}
+    .school-summary-text{color:var(--muted);font-size:.9rem;line-height:1.4}
+    .school-bars{display:grid;gap:9px;margin-top:8px}
+    .school-row{
+      display:grid;grid-template-columns:minmax(205px,1.8fr) 86px 86px minmax(150px,2.5fr) 64px;
+      gap:10px;align-items:center;padding:8px 10px;border-bottom:1px solid #edf1f5
+    }
+    .school-row:nth-child(even){background:#fbfcfd;border-radius:10px}
+    .school-name{font-size:.9rem;font-weight:700}
+    .school-count{font-size:.82rem;color:var(--muted);text-align:right;font-variant-numeric:tabular-nums}
+    .school-track{height:10px;background:#e7edf3;border-radius:999px;overflow:hidden}
+    .school-fill{height:100%;border-radius:999px;background:var(--primary)}
+    .school-rate{text-align:right;font-weight:850;font-variant-numeric:tabular-nums}
+    .school-rate.over{color:var(--positive)}
+    .school-notes{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:22px}
+    .school-note{
+      border:1px solid var(--border);border-radius:16px;padding:16px;background:#fafbfd;
+      font-size:.9rem;line-height:1.55
+    }
+    .school-note.important{background:var(--positive-bg);border-color:#cfe9dc}
+    .school-note p{margin:8px 0 10px}
+    .school-note a{color:var(--primary);font-size:.82rem;font-weight:750;text-decoration:none}
+    .school-note a:hover{text-decoration:underline}
+    .note-kicker{font-size:.79rem;text-transform:uppercase;letter-spacing:.06em;color:var(--primary);font-weight:850}
+    .attention-kicker{display:flex;align-items:center;gap:8px;font-size:.79rem;text-transform:uppercase;letter-spacing:.06em;color:var(--primary);font-weight:850}
+    .attention-icon{font-size:1.25rem;line-height:1}
+    .note-small{font-size:.82rem;color:#526277}
+
+    @media(max-width:900px){
+      .hero{grid-template-columns:1fr 1fr}
+      .hero-main{grid-column:1 / -1}
+      .cards{grid-template-columns:repeat(2,1fr)}
+      .school-notes{grid-template-columns:1fr}
+      .school-row{grid-template-columns:minmax(180px,1.5fr) 72px 72px minmax(120px,2fr) 60px}
+    }
+    @media(max-width:620px){
+      .wrap{padding:20px 13px 40px}
+      .hero{grid-template-columns:1fr}
+      .hero-main{grid-column:auto}
+      header{align-items:flex-start;flex-direction:column}
+      .stamp{white-space:normal}
+      .cards{grid-template-columns:1fr}
+      .section{padding:16px}
+      .section-head{align-items:flex-start;flex-direction:column}
+      .tools{width:100%}.search{width:100%;min-width:0}
+      .table-scroll{overflow-x:auto}
+      .north-table{min-width:590px}
+      .bar-row{grid-template-columns:28px minmax(105px,1.2fr) minmax(75px,2fr) 40px;gap:7px;padding-inline:4px}
+      .school-bars{overflow-x:auto}
+      .school-row{min-width:690px}
+      .school-summary{grid-template-columns:1fr}
+      .school-summary-number{width:48px;height:48px}
+    }
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <div class="eyebrow">Educação · Lagoa Santa</div>
+      <h1>IDEB 2025</h1>
+      <p class="subtitle">Desempenho de Lagoa Santa na RMBH e no Vetor Norte</p>
+    </div>
+    <div class="stamp">Comparação principal: 2023 → 2025</div>
+  </header>
+
+  <div class="tabs" role="tablist" aria-label="Etapa de ensino">
+    <button class="tab active" id="tab-iniciais" data-stage="iniciais" role="tab" aria-selected="true">Anos iniciais</button>
+    <button class="tab" id="tab-finais" data-stage="finais" role="tab" aria-selected="false">Anos finais</button>
+    <button class="tab" id="tab-escolas" data-stage="escolas" role="tab" aria-selected="false">Por escola</button>
+  </div>
+
+  <div id="municipalView">
+  <section class="hero">
+    <div class="hero-main">
+      <div class="hero-label" id="heroStage">Anos iniciais</div>
+      <div class="hero-value" id="heroValue">6,2</div>
+      <div class="delta" id="heroDelta">▲ +0,3 desde 2023</div>
+      <p class="hero-copy" id="heroCopy"></p>
+    </div>
+    <div class="hero-side">
+      <div class="hero-label">Mudança de posição · Vetor Norte</div>
+      <div class="side-big" id="heroRankMove">6º → 3º</div>
+      <div class="side-note" id="heroSideNote"></div>
+    </div>
+    <div class="hero-side rmbh-card">
+      <div class="hero-label">Mudança de posição · RMBH</div>
+      <div class="side-big" id="heroRmbhMove">21º → 16º</div>
+      <div class="side-note" id="heroRmbhNote">Lagoa Santa avançou cinco posições entre 2023 e 2025.</div>
+    </div>
+  </section>
+
+  <section class="cards" id="cards"></section>
+
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <h2>Vetor Norte · evolução 2023–2025</h2>
+        <p class="section-desc">Comparação dos municípios informados, com destaque para Lagoa Santa.</p>
+      </div>
+      <div class="mini-legend"><span class="legend-dot"></span>Lagoa Santa</div>
+    </div>
+    <div class="table-scroll">
+      <table class="north-table">
+        <thead>
+          <tr><th>Município</th><th class="num">2023</th><th class="num">2025</th><th class="num">Variação</th></tr>
+        </thead>
+        <tbody id="northBody"></tbody>
+      </table>
+    </div>
+    <div class="footnote" id="northNote"></div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <h2>Ranking da RMBH · 2025</h2>
+        <p class="section-desc">Posições por nota, preservando empates conforme os dados enviados.</p>
+      </div>
+      <div class="tools">
+        <input class="search" id="searchRank" type="search" placeholder="Buscar município…" aria-label="Buscar município no ranking">
+      </div>
+    </div>
+    <div class="bars" id="rankingBars"></div>
+    <div class="footnote" id="rankNote"></div>
+  </section>
+
+  </div>
+
+  <div id="schoolsView" hidden>
+    <section class="section school-participation-card">
+      <div class="section-head">
+        <div>
+          <h2>Participação no Saeb por escola</h2>
+          <p class="section-desc">Alunos presentes na avaliação em relação ao total de matrículas de referência do Censo Escolar.</p>
+        </div>
+        <div class="mini-legend"><span class="legend-dot"></span>Taxa de participação</div>
+      </div>
+
+      <div class="school-subtabs" id="participationTabs" role="tablist" aria-label="Etapa da participação">
+        <button class="school-subtab active" data-participation-grade="quinto" role="tab" aria-selected="true">Anos Iniciais</button>
+        <button class="school-subtab" data-participation-grade="nono" role="tab" aria-selected="false">Anos Finais</button>
+      </div>
+
+      <div class="school-summary">
+        <div class="school-summary-number" id="schoolCount">13</div>
+        <div>
+          <div class="school-summary-label" id="schoolSummaryLabel">escolas dos Anos Iniciais no recorte</div>
+          <div class="school-summary-text">A participação elevada aumenta a representatividade do resultado do Saeb e, consequentemente, a confiabilidade da leitura do IDEB.</div>
+        </div>
+      </div>
+
+      <div class="school-bars" id="schoolParticipation"></div>
+
+      <div class="school-notes">
+        <article class="school-note">
+          <div class="note-kicker">Por que há taxas acima de 100%?</div>
+          <p>O denominador usa as matrículas de referência do Censo Escolar. Alunos admitidos depois da data-base podem fazer o Saeb por meio de provas extras e ser contabilizados como participantes, embora não integrem aquele total inicial de matrículas. Por isso, em algumas escolas, o número de presentes pode superar o número usado como referência e a taxa ultrapassar 100%.</p>
+          <a href="https://www.gov.br/inep/pt-br/acesso-a-informacao/perguntas-frequentes/sistema-de-avaliacao-da-educacao-basica-saeb/calculo-de-proficiencia/alunos-transferidos-apos-a-data-base" target="_blank" rel="noreferrer">Fonte: Inep</a>
+        </article>
+
+        <article class="school-note important">
+          <div class="attention-kicker"><span class="attention-icon" aria-hidden="true">⚠️</span><span>Por que esse dado é relevante?</span></div>
+          <p>O desempenho médio é mais preciso quando há uma alta taxa de participação. Uma participação baixa pode criar <strong>viés de seleção</strong>: se alunos de menor desempenho deixam de fazer a prova, a média observada pode ficar artificialmente acima da aprendizagem real, e em muitas redes isso ocorre de forma intencional, algo que <strong>não aconteceu em Lagoa Santa, onde a participação foi alta na maioria das escolas</strong>. A participação próxima de 100% reduz esse risco e torna a comparação entre escolas e redes mais robusta.</p>
+          <p class="note-small">No Saeb 2025, o Inep estabelece participação mínima de 80% dos estudantes matriculados, além de pelo menos 10 presentes, para divulgação do resultado por escola.</p>
+          <a href="https://www.gov.br/inep/pt-br/acesso-a-informacao/perguntas-frequentes/sistema-de-avaliacao-da-educacao-basica-saeb" target="_blank" rel="noreferrer">Critério oficial: Inep</a>
+        </article>
+      </div>
+
+      <div class="footnote">
+        <strong>Leitura do indicador:</strong> a taxa mostrada aqui é participação na avaliação, e não frequência escolar cotidiana. Os dados exibidos são de 2025. Linhas repetidas com os mesmos valores foram consolidadas em um único registro por escola e série.
+      </div>
+    </section>
+
+    <section class="section" id="schoolResultsSection">
+      <div class="section-head">
+        <div>
+          <h2 id="schoolTrendTitle">Evolução do IDEB por escola · Anos Iniciais</h2>
+          <p class="section-desc" id="schoolTrendDesc">Selecione uma escola para visualizar a trajetória entre 2021 e 2025.</p>
+        </div>
+        <div class="mini-legend">2021 · 2023 · 2025</div>
+      </div>
+
+      <div class="school-subtabs" id="trendTabs" role="tablist" aria-label="Etapa da evolução do IDEB">
+        <button class="school-subtab active" data-trend-grade="quinto" role="tab" aria-selected="true">Anos Iniciais</button>
+        <button class="school-subtab" data-trend-grade="nono" role="tab" aria-selected="false">Anos Finais</button>
+      </div>
+
+      <div class="school-select-wrap">
+        <label for="schoolSelect" class="school-select-label">Selecione a escola</label>
+        <select id="schoolSelect" class="school-select" aria-label="Selecione uma escola"></select>
+      </div>
+
+      <div class="trend-header">
+        <div>
+          <div class="trend-school" id="trendSchool">EM DONA MARUCAS</div>
+          <div class="trend-summary" id="trendSummary"></div>
+        </div>
+        <div class="trend-badge" id="trendBadge"></div>
+      </div>
+
+      <div class="trend-chart-wrap">
+        <svg id="idebTrendChart" viewBox="0 0 760 320" role="img" aria-label="Gráfico de evolução do IDEB da escola selecionada">
+          <g id="chartGrid"></g>
+          <g id="chartSeries"></g>
+          <g id="chartLabels"></g>
+        </svg>
+      </div>
+
+      <div class="footnote">
+        <strong>Leitura do gráfico:</strong> são exibidos somente os resultados do IDEB de 2021, 2023 e 2025. Quando 2021 está disponível, a variação compara 2021 com 2025; quando não há resultado em 2021, a comparação usa 2023 e 2025. O menu suspenso mostra apenas escolas com pelo menos um resultado divulgado entre 2021 e 2025.
+      </div>
+    </section>
+  </div>
+
+  <footer>Dashboard demonstrativo construído a partir dos dados fornecidos nesta conversa.</footer>
+</div>
+
+<script>
+
+
+const SCHOOL_PARTICIPATION = {
+  quinto: [
+    ["EM ALBERTO SANTOS DUMONT",48,49],
+    ["EM CORONEL PEDRO VIEIRA DE FREITAS",48,49],
+    ["EM DE LAPINHA",22,22],
+    ["EM DONA ARAMITA",33,34],
+    ["EM DONA MARIA AUGUSTA",13,13],
+    ["EM DONA MARUCAS",64,66],
+    ["EM DONA SANTINHA",102,97],
+    ["EM HERCULANO LIBERATO DE ALMEIDA",44,39],
+    ["EM LIVIO MUCIO CONRADO SILVA - SENHOR TITO",86,81],
+    ["EM PROFESSORA CLAUDOMIRA",74,75],
+    ["EM PROFª MERCIA MARGARIDA LACERDA MACHADO",130,126],
+    ["EM PROFº MELLO TEIXEIRA",46,46],
+    ["EM DR LUND",48,40]
+  ],
+  nono: [
+    ["EM CORONEL PEDRO VIEIRA DE FREITAS",30,32],
+    ["EM DE LAPINHA",32,28],
+    ["EM HERCULANO LIBERATO DE ALMEIDA",48,42],
+    ["EM LIVIO MUCIO CONRADO SILVA - SENHOR TITO",59,51],
+    ["EM PROFª MERCIA MARGARIDA LACERDA MACHADO",87,82],
+    ["EM PROFº MELLO TEIXEIRA",41,44]
+  ]
+};
+
+let participationGrade = "quinto";
+let trendGrade = "quinto";
+
+
+
+const SCHOOL_IDEB_5 = [
+  {name:"EM ALBERTO SANTOS DUMONT", values:{2019:6.8,2021:null,2023:null,2025:7.0}},
+  {name:"EM CORONEL PEDRO VIEIRA DE FREITAS", values:{2019:6.0,2021:6.1,2023:5.8,2025:6.3}},
+  {name:"EM DE LAPINHA", values:{2019:6.3,2021:5.3,2023:5.9,2025:5.4}},
+  {name:"EM DONA ARAMITA", values:{2019:6.3,2021:null,2023:5.0,2025:6.3}},
+  {name:"EM DONA MARIA AUGUSTA", values:{2019:6.4,2021:5.4,2023:5.7,2025:6.2}},
+  {name:"EM DONA MARUCAS", values:{2019:7.5,2021:null,2023:6.4,2025:7.0}},
+  {name:"EM DONA SANTINHA", values:{2019:6.3,2021:null,2023:6.1,2025:6.1}},
+  {name:"EM HERCULANO LIBERATO DE ALMEIDA", values:{2019:5.2,2021:5.5,2023:null,2025:5.4}},
+  {name:"EM LIVIO MUCIO CONRADO SILVA - SENHOR TITO", values:{2019:6.2,2021:null,2023:5.4,2025:6.2}},
+  {name:"EM ODETE VALADARES", values:{2019:6.3,2021:null,2023:6.5,2025:null}},
+  {name:"EM PROFESSORA CLAUDOMIRA", values:{2019:6.3,2021:null,2023:6.5,2025:6.2}},
+  {name:"EM PROFª MERCIA MARGARIDA LACERDA MACHADO", values:{2019:6.1,2021:null,2023:6.1,2025:6.0}},
+  {name:"EM PROFº MELLO TEIXEIRA", values:{2019:5.4,2021:null,2023:5.4,2025:6.1}},
+  {name:"EM DR LUND", values:{2019:6.3,2021:5.5,2023:6.1,2025:6.0}},
+  {name:"EM MESSIAS PINTO ALVES", values:{2019:null,2021:null,2023:null,2025:null}},
+  {name:"EM NILZA VIEIRA DE AZEREDO MELO", values:{2019:null,2021:null,2023:null,2025:null}},
+  {name:"EM DONA NANA", values:{2019:null,2021:null,2023:null,2025:null}}
+];
+
+const SCHOOL_IDEB_9 = [
+  {name:"EM CORONEL PEDRO VIEIRA DE FREITAS", values:{2019:null,2021:4.6,2023:4.4,2025:4.8}},
+  {name:"EM DE LAPINHA", values:{2019:4.8,2021:null,2023:null,2025:4.7}},
+  {name:"EM DONA ARAMITA", values:{2019:null,2021:null,2023:4.7,2025:null}},
+  {name:"EM DR LUND", values:{2019:4.7,2021:null,2023:4.7,2025:null}},
+  {name:"EM HERCULANO LIBERATO DE ALMEIDA", values:{2019:null,2021:null,2023:null,2025:4.5}},
+  {name:"EM LIVIO MUCIO CONRADO SILVA - SENHOR TITO", values:{2019:3.6,2021:4.3,2023:4.5,2025:4.8}},
+  {name:"EM PROFª MERCIA MARGARIDA LACERDA MACHADO", values:{2019:null,2021:null,2023:null,2025:4.8}},
+  {name:"EM PROFº MELLO TEIXEIRA", values:{2019:null,2021:null,2023:4.3,2025:4.8}}
+];
+
+const selectedSchoolByGrade = {
+  quinto: "EM DONA MARUCAS",
+  nono: "EM LIVIO MUCIO CONRADO SILVA - SENHOR TITO"
+};
+
+const DATA = {
+  iniciais: {
+    label: "Anos iniciais",
+    ideb2023: 5.9,
+    ideb2025: 6.2,
+    vetorRank2023: 6,
+    vetorRank2025: 3,
+    rmbhRank2023: 21,
+    rmbhRank2025: 16,
+    rmbhTotal: 34,
+    rmbhTies: ["Mateus Leme", "Belo Horizonte"],
+    heroCopy: "Lagoa Santa avançou 0,3 ponto no IDEB dos anos iniciais entre 2023 e 2025. No recorte do Vetor Norte, a melhora também aparece na posição relativa do município.",
+    sideNote: "Lagoa Santa passou do 6º para o 3º lugar entre os municípios do Vetor Norte considerados.",
+    cards: [
+      {label:"IDEB 2025", value:"6,2", sub:"Resultado dos anos iniciais", note:"Em 2023, o município registrava <strong>5,9</strong>. Em 2025, chegou a <strong>6,2</strong>."},
+      {label:"Variação 2023–2025", value:"+0,3", sub:"Crescimento em dois anos", note:"A nota aumentou cerca de <strong>5,1%</strong> em relação a 2023."}
+    ],
+    vetor: [
+      ["Capim Branco",6.2,7.0],["Confins",6.0,6.3],["Lagoa Santa",5.9,6.2],
+      ["Jaboticatubas",6.1,6.1],["Pedro Leopoldo",6.1,6.1],["São José da Lapa",6.3,6.1],
+      ["Vespasiano",5.9,6.1],["Santa Luzia",5.6,5.9],["Ribeirão das Neves",5.4,5.7]
+    ],
+    ranking: [
+      ["Rio Manso",7.7],["Florestal",7.3],["Capim Branco",7.0],["Sarzedo",6.9],["Itaguara",6.9],
+      ["Baldim",6.7],["Nova Lima",6.7],["Brumadinho",6.5],["Caeté",6.5],["Raposos",6.5],
+      ["Juatuba",6.4],["Mário Campos",6.3],["Confins",6.3],["Itatiaiuçu",6.3],["Nova União",6.3],
+      ["Mateus Leme",6.2],["Lagoa Santa",6.2],["Belo Horizonte",6.2],["São José da Lapa",6.1],
+      ["Jaboticatubas",6.1],["Pedro Leopoldo",6.1],["Vespasiano",6.1],["Sabará",6.0],["Igarapé",6.0],
+      ["Betim",6.0],["Taquaraçu de Minas",5.9],["Rio Acima",5.9],["Contagem",5.9],["Matozinhos",5.9],
+      ["Santa Luzia",5.9],["São Joaquim de Bicas",5.9],["Ibirité",5.7],["Ribeirão das Neves",5.7],["Esmeraldas",5.6]
+    ]
+  },
+  finais: {
+    label: "Anos finais",
+    ideb2023: 4.4,
+    ideb2025: 4.8,
+    vetorRank2023: 5,
+    vetorRank2025: 2,
+    rmbhRank2023: 15,
+    rmbhRank2025: 10,
+    rmbhTotal: 21,
+    rmbhTies: ["Sabará","São José da Lapa","Contagem","Ibirité","Vespasiano","Pedro Leopoldo"],
+    heroCopy: "Nos anos finais, Lagoa Santa avançou 0,4 ponto entre 2023 e 2025. O ganho foi acompanhado por uma subida expressiva no ranking do Vetor Norte.",
+    sideNote: "Lagoa Santa passou do 5º para o 2º lugar no Vetor Norte, empatada em 2025 com outros municípios que também alcançaram 4,8.",
+    cards: [
+      {label:"IDEB 2025", value:"4,8", sub:"Resultado dos anos finais", note:"Em 2023, o município registrava <strong>4,4</strong>. Em 2025, chegou a <strong>4,8</strong>."},
+      {label:"Variação 2023–2025", value:"+0,4", sub:"Crescimento em dois anos", note:"A nota aumentou cerca de <strong>9,1%</strong> em relação a 2023."}
+    ],
+    vetor: [
+      ["Confins",5.4,5.2],["São José da Lapa",4.9,4.8],["Vespasiano",4.8,4.8],
+      ["Lagoa Santa",4.4,4.8],["Pedro Leopoldo",4.1,4.8],["Santa Luzia",4.3,4.6],
+      ["Ribeirão das Neves",4.5,4.5]
+    ],
+    ranking: [
+      ["Brumadinho",5.5],["Itatiaiuçu",5.5],["Nova Lima",5.3],["Matozinhos",5.3],["Confins",5.2],
+      ["Juatuba",5.2],["Belo Horizonte",5.2],["Betim",5.1],["São Joaquim de Bicas",4.9],
+      ["Sabará",4.8],["São José da Lapa",4.8],["Contagem",4.8],["Ibirité",4.8],["Vespasiano",4.8],
+      ["Lagoa Santa",4.8],["Pedro Leopoldo",4.8],["Mateus Leme",4.7],["Santa Luzia",4.6],
+      ["Ribeirão das Neves",4.5],["Esmeraldas",4.2],["Rio Acima",4.1]
+    ]
+  }
+};
+
+let stage = "iniciais";
+
+const fmt = n => n.toLocaleString("pt-BR",{minimumFractionDigits:1,maximumFractionDigits:1});
+
+function competitionRanks(arr){
+  const sorted = [...arr].sort((a,b)=>{
+    const scoreDiff = b[1]-a[1];
+    if(scoreDiff !== 0) return scoreDiff;
+    if(a[0] === "Lagoa Santa" && b[0] !== "Lagoa Santa") return -1;
+    if(b[0] === "Lagoa Santa" && a[0] !== "Lagoa Santa") return 1;
+    return a[0].localeCompare(b[0],"pt-BR",{sensitivity:"base"});
+  });
+  let prev = null, rank = 0;
+  return sorted.map((item,i)=>{
+    if(item[1] !== prev) rank = i+1;
+    prev = item[1];
+    return [...item, rank];
+  });
+}
+
+
+function renderSchoolResults(){
+  const section = document.getElementById("schoolResultsSection");
+  if(!section) return;
+
+  section.hidden = false;
+
+  const raw = trendGrade === "quinto" ? SCHOOL_IDEB_5 : SCHOOL_IDEB_9;
+  const gradeLabel = trendGrade === "quinto" ? "Anos Iniciais" : "Anos Finais";
+
+  document.getElementById("schoolTrendTitle").textContent = `Evolução do IDEB por escola · ${gradeLabel}`;
+  document.getElementById("schoolTrendDesc").textContent =
+    `Selecione uma escola para visualizar a trajetória do ${gradeLabel} entre 2021 e 2025.`;
+
+  const schools = raw
+    .filter(s=>[2021,2023,2025].some(y=>s.values[y] !== null))
+    .sort((a,b)=>a.name.localeCompare(b.name,"pt-BR",{sensitivity:"base"}));
+
+  let selectedSchool = selectedSchoolByGrade[trendGrade];
+  if(!schools.some(s=>s.name===selectedSchool)){
+    selectedSchool = schools[0]?.name || "";
+    selectedSchoolByGrade[trendGrade] = selectedSchool;
+  }
+
+  const select = document.getElementById("schoolSelect");
+  select.innerHTML = schools.map(s=>
+    `<option value="${s.name}" ${s.name===selectedSchool?"selected":""}>${s.name}</option>`
+  ).join("");
+
+  select.onchange = ()=>{
+    selectedSchoolByGrade[trendGrade] = select.value;
+    drawSchoolTrend(schools.find(s=>s.name===select.value) || schools[0]);
+  };
+
+  if(schools.length){
+    drawSchoolTrend(schools.find(s=>s.name===selectedSchool) || schools[0]);
+  }
+}
+
+function drawSchoolTrend(school){
+  const years = [2021,2023,2025];
+  const values = years.map(y=>school.values[y]);
+  const available = years.map((y,i)=>({year:y,value:values[i]})).filter(d=>d.value !== null);
+
+  document.getElementById("trendSchool").textContent = school.name;
+  const summary = document.getElementById("trendSummary");
+  const badge = document.getElementById("trendBadge");
+
+  const baselineYear = school.values[2021] !== null ? 2021 :
+                       school.values[2023] !== null ? 2023 : null;
+  const baselineValue = baselineYear ? school.values[baselineYear] : null;
+  const finalValue = school.values[2025];
+
+  if(!available.length){
+    summary.textContent = "Nenhum resultado divulgado entre 2021 e 2025.";
+    badge.textContent = "Sem dados";
+    badge.className = "trend-badge neutral";
+  } else if(baselineYear !== null && finalValue !== null && baselineYear !== 2025){
+    const delta = +(finalValue-baselineValue).toFixed(1);
+    summary.textContent = `${baselineYear}: ${baselineValue.toLocaleString("pt-BR",{minimumFractionDigits:1})} · 2025: ${finalValue.toLocaleString("pt-BR",{minimumFractionDigits:1})}`;
+    badge.textContent = `${delta>0?"+":""}${delta.toLocaleString("pt-BR",{minimumFractionDigits:1})} desde ${baselineYear}`;
+    badge.className = "trend-badge" + (delta<0 ? " down" : delta===0 ? " neutral" : "");
+  } else {
+    const first = available[0];
+    const last = available[available.length-1];
+    summary.textContent = available.length === 1
+      ? `${first.year}: ${first.value.toLocaleString("pt-BR",{minimumFractionDigits:1})}`
+      : `${first.year}: ${first.value.toLocaleString("pt-BR",{minimumFractionDigits:1})} · ${last.year}: ${last.value.toLocaleString("pt-BR",{minimumFractionDigits:1})}`;
+    badge.textContent = "Sem comparação até 2025";
+    badge.className = "trend-badge neutral";
+  }
+
+  const grid = document.getElementById("chartGrid");
+  const series = document.getElementById("chartSeries");
+  const labels = document.getElementById("chartLabels");
+  grid.innerHTML = ""; series.innerHTML = ""; labels.innerHTML = "";
+
+  const W=760,H=320,left=58,right=26,top=24,bottom=46;
+  const minY=4.0,maxY=8.0;
+  const x = i => left + i*((W-left-right)/(years.length-1));
+  const y = v => top + (maxY-v)*((H-top-bottom)/(maxY-minY));
+
+  [4,5,6,7,8].forEach(t=>{
+    grid.innerHTML += `<line class="chart-grid-line" x1="${left}" y1="${y(t)}" x2="${W-right}" y2="${y(t)}"></line>`;
+    labels.innerHTML += `<text class="chart-axis-label" x="${left-12}" y="${y(t)+4}" text-anchor="end">${t.toLocaleString("pt-BR",{minimumFractionDigits:1})}</text>`;
+  });
+  years.forEach((yr,i)=>{
+    labels.innerHTML += `<text class="chart-axis-label" x="${x(i)}" y="${H-16}" text-anchor="middle">${yr}</text>`;
+  });
+
+  if(!available.length){
+    series.innerHTML = `<text class="chart-empty" x="${W/2}" y="${H/2}" text-anchor="middle">Sem resultados do IDEB entre 2021 e 2025</text>`;
+    return;
+  }
+
+  let segment = [];
+  const flush = ()=>{
+    if(segment.length>1){
+      const pts = segment.map(d=>`${x(d.index)},${y(d.value)}`).join(" ");
+      series.innerHTML += `<polyline class="chart-line" points="${pts}"></polyline>`;
+    }
+    segment=[];
+  };
+
+  values.forEach((v,i)=>{
+    if(v===null){ flush(); return; }
+    segment.push({index:i,value:v});
+  });
+  flush();
+
+  available.forEach((d,idx)=>{
+    const i = years.indexOf(d.year);
+    const delay = (idx*120)+250;
+    series.innerHTML += `<circle class="chart-point" style="animation-delay:${delay}ms" cx="${x(i)}" cy="${y(d.value)}" r="7"></circle>`;
+    labels.innerHTML += `<text class="chart-value-label" x="${x(i)}" y="${y(d.value)-14}" text-anchor="middle">${d.value.toLocaleString("pt-BR",{minimumFractionDigits:1})}</text>`;
+  });
+
+  for(let i=0;i<available.length-1;i++){
+    const a=available[i], b=available[i+1];
+    const ai=years.indexOf(a.year), bi=years.indexOf(b.year);
+    if(bi-ai>1){
+      series.innerHTML += `<line x1="${x(ai)}" y1="${y(a.value)}" x2="${x(bi)}" y2="${y(b.value)}" stroke="#9fb0bd" stroke-width="2" stroke-dasharray="5 7"></line>`;
+    }
+  }
+}
+
+function renderSchools(){
+  const root = document.getElementById("schoolParticipation");
+  const rows = [...SCHOOL_PARTICIPATION[participationGrade]].sort((a,b)=>
+    a[0].localeCompare(b[0],"pt-BR",{sensitivity:"base"})
+  );
+
+  document.getElementById("schoolCount").textContent = rows.length;
+  document.getElementById("schoolSummaryLabel").textContent =
+    `escolas dos ${participationGrade === "quinto" ? "Anos Iniciais" : "Anos Finais"} no recorte`;
+
+  root.innerHTML = rows.map(([name,enrolled,present])=>{
+    const rate = (present/enrolled)*100;
+    const width = Math.min(rate,110) / 110 * 100;
+    return `<div class="school-row">
+      <div class="school-name">${name}</div>
+      <div class="school-count" title="Matrículas de referência">Censo ${enrolled}</div>
+      <div class="school-count" title="Presentes no Saeb">Presentes ${present}</div>
+      <div class="school-track" aria-label="${name}: ${rate.toLocaleString("pt-BR",{minimumFractionDigits:1,maximumFractionDigits:1})}%">
+        <div class="school-fill" style="width:${width}%"></div>
+      </div>
+      <div class="school-rate ${rate>100?"over":""}">${rate.toLocaleString("pt-BR",{minimumFractionDigits:1,maximumFractionDigits:1})}%</div>
+    </div>`;
+  }).join("");
+}
+
+function render(){
+  const municipal = document.getElementById("municipalView");
+  const schools = document.getElementById("schoolsView");
+  if(stage === "escolas"){
+    municipal.hidden = true;
+    schools.hidden = false;
+    renderSchools();
+    renderSchoolResults();
+    return;
+  }
+  municipal.hidden = false;
+  schools.hidden = true;
+  const d = DATA[stage];
+  document.getElementById("heroStage").textContent = d.label;
+  document.getElementById("heroValue").textContent = fmt(d.ideb2025);
+  const delta = d.ideb2025-d.ideb2023;
+  document.getElementById("heroDelta").textContent = `▲ +${fmt(delta)} desde 2023`;
+  document.getElementById("heroCopy").textContent = d.heroCopy;
+  document.getElementById("heroRankMove").textContent = `${d.vetorRank2023}º → ${d.vetorRank2025}º`;
+  document.getElementById("heroSideNote").textContent = d.sideNote;
+
+  document.getElementById("heroRmbhMove").textContent = `${d.rmbhRank2023}º → ${d.rmbhRank2025}º`;
+  const rmbhGain = d.rmbhRank2023 - d.rmbhRank2025;
+  document.getElementById("heroRmbhNote").textContent =
+    `Lagoa Santa avançou ${rmbhGain} posições entre 2023 e 2025, em um universo de ${d.rmbhTotal} municípios.`;
+
+  document.getElementById("cards").innerHTML = d.cards.map(c => `
+    <article class="card">
+      <div class="card-label">${c.label}</div>
+      <div class="card-value">${c.value}</div>
+      <div class="card-sub">${c.sub}</div>
+      <div class="card-note">${c.note}</div>
+    </article>`).join("");
+
+  const vetorSorted = [...d.vetor].sort((a,b)=>{
+    const scoreDiff = b[2]-a[2];
+    if(scoreDiff !== 0) return scoreDiff;
+    if(a[0] === "Lagoa Santa" && b[0] !== "Lagoa Santa") return -1;
+    if(b[0] === "Lagoa Santa" && a[0] !== "Lagoa Santa") return 1;
+    return a[0].localeCompare(b[0],"pt-BR",{sensitivity:"base"});
+  });
+  document.getElementById("northBody").innerHTML = vetorSorted.map(([name,v23,v25])=>{
+    const ch = +(v25-v23).toFixed(1);
+    const cls = ch>0 ? "chg" : ch<0 ? "down" : "flat";
+    const s = ch>0 ? `+${fmt(ch)}` : fmt(ch);
+    return `<tr class="${name==="Lagoa Santa"?"lagoa":""}">
+      <td>${name}</td><td class="num">${fmt(v23)}</td><td class="num">${fmt(v25)}</td>
+      <td class="num ${cls}">${s}</td></tr>`;
+  }).join("");
+  document.getElementById("northNote").innerHTML = stage==="iniciais"
+    ? "Leitura principal: Lagoa Santa melhorou <strong>0,3 ponto</strong> e avançou do <strong>6º para o 3º lugar</strong> no Vetor Norte."
+    : "Leitura principal: Lagoa Santa melhorou <strong>0,4 ponto</strong> e avançou do <strong>5º para o 2º lugar</strong> no Vetor Norte.";
+
+  renderRanking();
+}
+
+function renderRanking(){
+  const d = DATA[stage];
+  const q = document.getElementById("searchRank").value.trim().toLocaleLowerCase("pt-BR");
+  const ranked = competitionRanks(d.ranking);
+  const max = Math.max(...ranked.map(x=>x[1]));
+  const min = Math.min(...ranked.map(x=>x[1]));
+  const filtered = ranked.filter(([name])=>!q || name.toLocaleLowerCase("pt-BR").includes(q));
+
+  document.getElementById("rankingBars").innerHTML = filtered.map(([name,score,rank])=>{
+    const pct = 20 + ((score-min)/(max-min || 1))*80;
+    return `<div class="bar-row ${name==="Lagoa Santa"?"lagoa":""}">
+      <div class="rank">${rank}º</div>
+      <div class="name" title="${name}">${name}</div>
+      <div class="track" aria-label="${name}: ${fmt(score)}"><div class="fill" style="width:${pct}%"></div></div>
+      <div class="score">${fmt(score)}</div>
+    </div>`;
+  }).join("");
+
+  document.getElementById("rankNote").innerHTML = stage==="iniciais"
+    ? "Lagoa Santa avançou do <strong>21º lugar em 2023</strong> para a faixa do <strong>16º lugar em 2025</strong>, entre 34 municípios da RMBH. O ranking considera empates."
+    : "Lagoa Santa avançou do <strong>15º lugar em 2023</strong> para a faixa do <strong>10º lugar em 2025</strong>, entre 21 municípios da RMBH. O ranking considera empates.";
+}
+
+document.querySelectorAll(".tab").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    stage = btn.dataset.stage;
+    document.querySelectorAll(".tab").forEach(b=>{
+      const active = b===btn;
+      b.classList.toggle("active",active);
+      b.setAttribute("aria-selected",active?"true":"false");
+    });
+    const search = document.getElementById("searchRank");
+    if(search) search.value="";
+    render();
+  });
+});
+document.getElementById("searchRank").addEventListener("input",()=>{
+  if(stage !== "escolas") renderRanking();
+});
+
+document.querySelectorAll("[data-participation-grade]").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    participationGrade = btn.dataset.participationGrade;
+    document.querySelectorAll("[data-participation-grade]").forEach(b=>{
+      const active = b===btn;
+      b.classList.toggle("active",active);
+      b.setAttribute("aria-selected",active?"true":"false");
+    });
+    renderSchools();
+  });
+});
+
+document.querySelectorAll("[data-trend-grade]").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    trendGrade = btn.dataset.trendGrade;
+    document.querySelectorAll("[data-trend-grade]").forEach(b=>{
+      const active = b===btn;
+      b.classList.toggle("active",active);
+      b.setAttribute("aria-selected",active?"true":"false");
+    });
+    renderSchoolResults();
+  });
+});
+
+render();
+</script>
+</body>
+</html>
