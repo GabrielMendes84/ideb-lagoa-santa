@@ -73,23 +73,6 @@
     .side-big{font-size:2.15rem;font-weight:850;margin:8px 0;color:var(--text)}
     .side-note{color:var(--muted);line-height:1.45}
 
-    .cards{
-      display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:26px;
-    }
-    .card{
-      background:var(--panel);border:1px solid var(--border);border-radius:18px;padding:18px 18px 0;
-      box-shadow:0 6px 18px rgba(25,49,72,.055);min-height:210px;display:flex;flex-direction:column
-    }
-    .card-label{font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:800}
-    .card-value{font-size:2.2rem;font-weight:850;margin:8px 0 2px;color:var(--text)}
-    .card-sub{color:var(--muted);font-size:.92rem;line-height:1.35;margin-bottom:14px}
-    .card-note{
-      margin-top:auto;margin-left:-18px;margin-right:-18px;padding:13px 18px 15px;
-      border-top:1px solid var(--border);background:#fafbfd;border-radius:0 0 18px 18px;
-      font-size:.83rem;line-height:1.4;color:#4c5b70
-    }
-    .card-note strong{color:var(--positive)}
-
     .section{padding:22px;margin-top:18px}
     .section-head{
       display:flex;justify-content:space-between;gap:18px;align-items:flex-end;margin-bottom:16px
@@ -250,7 +233,6 @@
     @media(max-width:900px){
       .hero{grid-template-columns:1fr 1fr}
       .hero-main{grid-column:1 / -1}
-      .cards{grid-template-columns:repeat(2,1fr)}
       .school-notes{grid-template-columns:1fr}
       .school-row{grid-template-columns:minmax(180px,1.5fr) 72px 72px minmax(120px,2fr) 60px}
     }
@@ -260,7 +242,6 @@
       .hero-main{grid-column:auto}
       header{align-items:flex-start;flex-direction:column}
       .stamp{white-space:normal}
-      .cards{grid-template-columns:1fr}
       .section{padding:16px}
       .section-head{align-items:flex-start;flex-direction:column}
       .tools{width:100%}.search{width:100%;min-width:0}
@@ -310,8 +291,6 @@
       <div class="side-note" id="heroRmbhNote">Lagoa Santa avançou cinco posições entre 2023 e 2025.</div>
     </div>
   </section>
-
-  <section class="cards" id="cards"></section>
 
   <section class="section">
     <div class="section-head">
@@ -520,10 +499,6 @@ const DATA = {
     rmbhTies: ["Mateus Leme", "Belo Horizonte"],
     heroCopy: "Lagoa Santa avançou 0,3 ponto no IDEB dos anos iniciais entre 2023 e 2025. No recorte do Vetor Norte, a melhora também aparece na posição relativa do município.",
     sideNote: "Lagoa Santa passou do 6º para o 3º lugar entre os municípios do Vetor Norte considerados.",
-    cards: [
-      {label:"IDEB 2025", value:"6,2", sub:"Resultado dos anos iniciais", note:"Em 2023, o município registrava <strong>5,9</strong>. Em 2025, chegou a <strong>6,2</strong>."},
-      {label:"Variação 2023–2025", value:"+0,3", sub:"Crescimento em dois anos", note:"A nota aumentou cerca de <strong>5,1%</strong> em relação a 2023."}
-    ],
     vetor: [
       ["Capim Branco",6.2,7.0],["Confins",6.0,6.3],["Lagoa Santa",5.9,6.2],
       ["Jaboticatubas",6.1,6.1],["Pedro Leopoldo",6.1,6.1],["São José da Lapa",6.3,6.1],
@@ -551,10 +526,6 @@ const DATA = {
     rmbhTies: ["Sabará","São José da Lapa","Contagem","Ibirité","Vespasiano","Pedro Leopoldo"],
     heroCopy: "Nos anos finais, Lagoa Santa avançou 0,4 ponto entre 2023 e 2025. O ganho foi acompanhado por uma subida expressiva no ranking do Vetor Norte.",
     sideNote: "Lagoa Santa passou do 5º para o 2º lugar no Vetor Norte, empatada em 2025 com outros municípios que também alcançaram 4,8.",
-    cards: [
-      {label:"IDEB 2025", value:"4,8", sub:"Resultado dos anos finais", note:"Em 2023, o município registrava <strong>4,4</strong>. Em 2025, chegou a <strong>4,8</strong>."},
-      {label:"Variação 2023–2025", value:"+0,4", sub:"Crescimento em dois anos", note:"A nota aumentou cerca de <strong>9,1%</strong> em relação a 2023."}
-    ],
     vetor: [
       ["Confins",5.4,5.2],["São José da Lapa",4.9,4.8],["Vespasiano",4.8,4.8],
       ["Lagoa Santa",4.4,4.8],["Pedro Leopoldo",4.1,4.8],["Santa Luzia",4.3,4.6],
@@ -766,14 +737,6 @@ function render(){
   const rmbhGain = d.rmbhRank2023 - d.rmbhRank2025;
   document.getElementById("heroRmbhNote").textContent =
     `Lagoa Santa avançou ${rmbhGain} posições entre 2023 e 2025, em um universo de ${d.rmbhTotal} municípios.`;
-
-  document.getElementById("cards").innerHTML = d.cards.map(c => `
-    <article class="card">
-      <div class="card-label">${c.label}</div>
-      <div class="card-value">${c.value}</div>
-      <div class="card-sub">${c.sub}</div>
-      <div class="card-note">${c.note}</div>
-    </article>`).join("");
 
   const vetorSorted = [...d.vetor].sort((a,b)=>{
     const scoreDiff = b[2]-a[2];
