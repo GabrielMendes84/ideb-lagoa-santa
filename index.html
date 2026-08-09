@@ -253,6 +253,126 @@
       .school-summary{grid-template-columns:1fr}
       .school-summary-number{width:48px;height:48px}
     }
+  
+    /* ===== MODO PAINEL / POWER BI ===== */
+    .header-actions{display:flex;align-items:center;gap:10px}
+    .fullscreen-btn{
+      appearance:none;border:1px solid var(--border);background:#fff;color:var(--primary);
+      border-radius:12px;padding:10px 13px;font:inherit;font-size:.84rem;font-weight:800;
+      cursor:pointer;white-space:nowrap
+    }
+    .fullscreen-btn:hover{background:var(--soft)}
+    .fullscreen-btn:focus-visible{outline:3px solid rgba(45,127,157,.25);outline-offset:2px}
+
+    @media(min-width:901px){
+      html,body{height:100%}
+      body{overflow:hidden}
+      .wrap{
+        max-width:none;width:100%;height:100vh;margin:0;
+        padding:14px 18px 16px;display:flex;flex-direction:column;min-height:0
+      }
+      header{
+        flex:0 0 auto;margin-bottom:8px;align-items:center
+      }
+      h1{font-size:clamp(1.65rem,2.25vw,2.35rem);margin:.2rem 0 .15rem}
+      .subtitle{font-size:.88rem}
+      .eyebrow{font-size:.68rem}
+      .stamp{padding:8px 11px;font-size:.78rem}
+      .tabs{
+        flex:0 0 auto;margin:4px 0 10px;padding:4px
+      }
+      .tab{padding:8px 14px;font-size:.86rem}
+
+      #municipalView{
+        flex:1;min-height:0;
+        display:grid;
+        grid-template-columns:minmax(0,.92fr) minmax(0,1.28fr);
+        grid-template-rows:auto minmax(0,1fr);
+        gap:12px
+      }
+      #municipalView[hidden]{display:none!important}
+      .hero{
+        grid-column:1 / -1;
+        grid-template-columns:1.45fr .78fr .78fr;
+        gap:12px;margin:0
+      }
+      .hero-main{padding:18px 20px}
+      .hero-side{padding:17px 18px}
+      .hero-value{font-size:clamp(3rem,5.1vw,4.6rem);margin:6px 0 8px}
+      .hero-copy{font-size:.91rem;line-height:1.4;margin-top:10px}
+      .side-big{font-size:1.75rem;margin:5px 0}
+      .side-note{font-size:.82rem;line-height:1.35}
+      .hero-label{font-size:.72rem}
+      .delta{padding:5px 9px;font-size:.78rem}
+
+      #municipalView > .section{
+        margin:0;padding:15px 16px;min-height:0;overflow:auto;
+        border-radius:17px
+      }
+      .section-head{margin-bottom:9px;gap:10px}
+      .section h2{font-size:1.04rem}
+      .section-desc{font-size:.78rem}
+      .mini-legend{font-size:.72rem}
+      .north-table th,.north-table td{padding:6px 8px;font-size:.78rem}
+      .north-table th{font-size:.67rem}
+      .bars{gap:4px}
+      .bar-row{
+        grid-template-columns:30px minmax(135px,1.35fr) minmax(100px,3fr) 42px;
+        gap:7px;padding:2px 5px
+      }
+      .rank{font-size:.72rem}
+      .name{font-size:.76rem}
+      .score{font-size:.77rem}
+      .track{height:8px}
+      .search{padding:7px 9px;font-size:.78rem;min-width:175px}
+      .footnote{margin-top:8px;padding:8px 10px;font-size:.72rem;line-height:1.35}
+      footer{display:none}
+
+      #schoolsView{
+        flex:1;min-height:0;
+        display:grid;
+        grid-template-columns:minmax(0,1.12fr) minmax(0,.88fr);
+        gap:12px
+      }
+      #schoolsView[hidden]{display:none!important}
+      #schoolsView > .section{
+        margin:0;padding:15px 16px;min-height:0;overflow:auto;border-radius:17px
+      }
+      .school-subtabs{margin-bottom:10px}
+      .school-subtab{padding:7px 11px;font-size:.78rem}
+      .school-summary{margin:2px 0 10px;padding:9px 11px;gap:9px}
+      .school-summary-number{width:42px;height:42px;font-size:1.2rem}
+      .school-summary-label{font-size:.8rem}
+      .school-summary-text{font-size:.72rem}
+      .school-bars{gap:3px}
+      .school-row{
+        grid-template-columns:minmax(190px,1.6fr) 72px 72px minmax(115px,2.2fr) 58px;
+        gap:7px;padding:5px 7px
+      }
+      .school-name{font-size:.74rem}
+      .school-count{font-size:.69rem}
+      .school-rate{font-size:.73rem}
+      .school-notes{grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+      .school-note{padding:10px;font-size:.72rem;line-height:1.4}
+      .school-note p{margin:5px 0 7px}
+      .school-note a{font-size:.69rem}
+      .note-kicker,.attention-kicker{font-size:.67rem}
+      .school-select-wrap{margin:0 0 10px;max-width:none}
+      .school-select-label{font-size:.68rem}
+      .school-select{padding:8px 9px;font-size:.78rem}
+      .trend-header{margin:3px 0 6px}
+      .trend-school{font-size:.91rem}
+      .trend-summary{font-size:.71rem}
+      .trend-badge{font-size:.68rem;padding:5px 8px}
+      #idebTrendChart{min-height:210px}
+    }
+
+    @media(max-width:900px){
+      body{overflow:auto}
+      .header-actions{width:100%;justify-content:space-between;flex-wrap:wrap}
+      .fullscreen-btn{padding:9px 11px}
+    }
+
   </style>
 </head>
 <body>
@@ -263,7 +383,10 @@
       <h1>IDEB 2025</h1>
       <p class="subtitle">Desempenho de Lagoa Santa na RMBH e no Vetor Norte</p>
     </div>
-    <div class="stamp">Comparação principal: 2023 → 2025</div>
+    <div class="header-actions">
+      <div class="stamp">Comparação principal: 2023 → 2025</div>
+      <button class="fullscreen-btn" id="fullscreenBtn" type="button" aria-label="Alternar tela cheia">⛶ Tela cheia</button>
+    </div>
   </header>
 
   <div class="tabs" role="tablist" aria-label="Etapa de ensino">
@@ -823,6 +946,26 @@ document.querySelectorAll("[data-trend-grade]").forEach(btn=>{
     renderSchoolResults();
   });
 });
+
+
+const fullscreenBtn = document.getElementById("fullscreenBtn");
+if(fullscreenBtn){
+  const syncFullscreenLabel = ()=>{
+    fullscreenBtn.textContent = document.fullscreenElement ? "⤢ Sair da tela cheia" : "⛶ Tela cheia";
+  };
+  fullscreenBtn.addEventListener("click", async ()=>{
+    try{
+      if(!document.fullscreenElement){
+        await document.documentElement.requestFullscreen();
+      }else{
+        await document.exitFullscreen();
+      }
+    }catch(e){
+      console.warn("Modo tela cheia não disponível neste navegador.", e);
+    }
+  });
+  document.addEventListener("fullscreenchange", syncFullscreenLabel);
+}
 
 render();
 </script>
