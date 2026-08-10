@@ -606,6 +606,108 @@
       #participationView .participation-over100-wide .school-note{padding:8px 11px}
     }
 
+  
+    #comparablesView[hidden]{display:none!important}
+
+    .compare-callout{
+      background:linear-gradient(135deg,#edf7f4,#f7fbfc);
+      border:1px solid #cfe6dc;border-radius:18px;padding:14px 17px;
+      display:grid;grid-template-columns:minmax(0,1.55fr) minmax(250px,.75fr);
+      gap:18px;align-items:center
+    }
+    .compare-kicker{
+      font-size:.68rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase;
+      color:var(--positive);margin-bottom:4px
+    }
+    .compare-callout strong{font-size:.91rem;line-height:1.35}
+    .compare-callout-note{font-size:.68rem;color:var(--muted);line-height:1.35}
+
+    .compare-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}
+    .compare-kpi{
+      background:var(--panel);border:1px solid var(--border);border-radius:15px;
+      box-shadow:0 5px 16px rgba(25,49,72,.055);padding:10px 12px;min-width:0
+    }
+    .compare-kpi-label{font-size:.65rem;color:var(--muted);font-weight:850;text-transform:uppercase;letter-spacing:.04em}
+    .compare-kpi-value{font-size:1.45rem;font-weight:950;margin:3px 0 1px;line-height:1.05}
+    .compare-kpi-value.positive{color:var(--positive)}
+    .compare-kpi-note{font-size:.68rem;color:var(--muted);line-height:1.25}
+
+    .compare-trend-card,.compare-side-card{margin:0;min-height:0}
+    .compare-trend-card{padding:14px 16px!important;overflow:hidden!important}
+    .compare-side-card{padding:12px 14px!important;overflow:hidden!important}
+    .compare-chart-wrap{width:100%;height:calc(100% - 68px);min-height:250px}
+    #compareTrendChart{display:block;width:100%;height:100%}
+    .compare-grid-line{stroke:#e3e9ef;stroke-width:1}
+    .compare-axis{fill:#758297;font-size:10.5px}
+    .compare-axis-title{fill:#526277;font-size:11px;font-weight:800}
+    .compare-peer-line{fill:none;stroke:#a9b5c0;stroke-width:1.7;opacity:.62}
+    .compare-peer-point{fill:#fff;stroke:#a9b5c0;stroke-width:1.5;opacity:.86}
+    .compare-ls-line{fill:none;stroke:var(--primary);stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
+    .compare-ls-point{fill:#fff;stroke:var(--primary);stroke-width:3}
+    .compare-ls-label{
+      fill:var(--primary);font-size:11px;font-weight:900;
+      paint-order:stroke;stroke:#fff;stroke-width:4px;stroke-linejoin:round
+    }
+    .compare-legend{display:flex;gap:11px;align-items:center;flex-wrap:wrap;font-size:.68rem;color:var(--muted)}
+    .compare-legend span{display:inline-flex;gap:5px;align-items:center}
+    .compare-line{display:inline-block;width:20px;height:0;border-top:3px solid}
+    .compare-line.ls{border-color:var(--primary)}
+    .compare-line.peers{border-color:#a9b5c0;border-top-width:2px}
+    .compare-trend-note{font-size:.68rem;color:var(--muted);line-height:1.3;margin-top:3px}
+    .compare-trend-note strong{color:var(--text)}
+
+    .compare-side-tabs{
+      display:grid;grid-template-columns:1fr 1fr;background:#edf1f5;border-radius:11px;padding:4px;gap:4px
+    }
+    .compare-side-tab{
+      border:0;background:transparent;color:var(--muted);font:inherit;font-size:.72rem;font-weight:850;
+      padding:7px 8px;border-radius:8px;cursor:pointer
+    }
+    .compare-side-tab.active{background:#fff;color:var(--primary);box-shadow:0 2px 8px rgba(30,60,90,.08)}
+    .compare-side-head{font-size:.72rem;font-weight:850;margin:10px 3px 5px}
+    .compare-list{display:grid;gap:2px}
+    .compare-row{
+      display:grid;grid-template-columns:28px minmax(0,1fr) 42px;gap:7px;align-items:center;
+      padding:4px 6px;border-radius:8px;font-size:.7rem
+    }
+    .compare-row:nth-child(even){background:#fafbfd}
+    .compare-row.lagoa{background:var(--ls);font-weight:900}
+    .compare-row-rank{text-align:right;color:var(--muted);font-weight:850}
+    .compare-row-name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .compare-row-value{text-align:right;font-weight:900}
+    .compare-row-value.up{color:var(--positive)}
+    .compare-row-value.down{color:#9b5b24}
+    .compare-side-foot{
+      border-top:1px solid var(--border);margin-top:7px;padding-top:7px;
+      font-size:.67rem;color:var(--muted);line-height:1.3
+    }
+
+    @media(min-width:901px){
+      #comparablesView{
+        flex:1;min-height:0;
+        display:grid;
+        grid-template-columns:minmax(0,1.65fr) minmax(285px,.75fr);
+        grid-template-rows:auto auto minmax(0,1fr);
+        gap:9px 11px
+      }
+      #comparablesView > .compare-callout,
+      #comparablesView > .compare-kpis{grid-column:1 / -1}
+      #comparablesView > .section{border-radius:17px}
+    }
+
+    @media(max-width:900px){
+      #comparablesView{display:block}
+      .compare-callout{grid-template-columns:1fr}
+      .compare-kpis{grid-template-columns:repeat(2,minmax(0,1fr));margin:12px 0}
+      .compare-trend-card,.compare-side-card{margin-top:12px}
+      .compare-chart-wrap{height:360px}
+    }
+
+    @media(max-width:560px){
+      .compare-kpis{grid-template-columns:1fr}
+      .compare-callout{padding:13px}
+    }
+
   </style>
 </head>
 <body>
@@ -627,6 +729,7 @@
     <button class="tab" id="tab-finais" data-stage="finais" role="tab" aria-selected="false">Anos finais</button>
     <button class="tab" id="tab-escolas" data-stage="escolas" role="tab" aria-selected="false">Por escola</button>
     <button class="tab" id="tab-participacao" data-stage="participacao" role="tab" aria-selected="false">Participação</button>
+    <button class="tab" id="tab-comparaveis" data-stage="comparaveis" role="tab" aria-selected="false">Comparáveis</button>
   </div>
 
   <div id="municipalView">
@@ -826,6 +929,71 @@
     </section>
   </div>
 
+
+  <div id="comparablesView" hidden>
+    <section class="compare-callout">
+      <div>
+        <div class="compare-kicker">Benchmark demográfico · Anos iniciais</div>
+        <strong>Em 2025, Lagoa Santa interrompeu a trajetória de queda e estagnação, cresceu acima da média dos municípios comparáveis e deixou a última posição do grupo.</strong>
+      </div>
+      <div class="compare-callout-note">Grupo: Alfenas, Itajubá, Itaúna, Ituiutaba, João Monlevade, Lagoa Santa, Pará de Minas, Patrocínio, São João del Rei e Viçosa.</div>
+    </section>
+
+    <section class="compare-kpis">
+      <article class="compare-kpi">
+        <div class="compare-kpi-label">Evolução 2023–2025</div>
+        <div class="compare-kpi-value positive">+0,3</div>
+        <div class="compare-kpi-note">IDEB · 5,9 → 6,2</div>
+      </article>
+      <article class="compare-kpi">
+        <div class="compare-kpi-label">Posição no grupo</div>
+        <div class="compare-kpi-value">10º → 8º</div>
+        <div class="compare-kpi-note">avanço de 2 posições</div>
+      </article>
+      <article class="compare-kpi">
+        <div class="compare-kpi-label">Velocidade de melhora</div>
+        <div class="compare-kpi-value">4ª</div>
+        <div class="compare-kpi-note">maior evolução entre 10 cidades</div>
+      </article>
+      <article class="compare-kpi">
+        <div class="compare-kpi-label">Recuperação histórica</div>
+        <div class="compare-kpi-value">60%</div>
+        <div class="compare-kpi-note">da perda acumulada de 2017 a 2023</div>
+      </article>
+    </section>
+
+    <section class="section compare-trend-card">
+      <div class="section-head">
+        <div>
+          <h2>Trajetória do IDEB · 2017–2025</h2>
+          <p class="section-desc">Lagoa Santa em destaque; as demais linhas representam municípios do grupo comparativo.</p>
+        </div>
+        <div class="compare-legend">
+          <span><i class="compare-line ls"></i>Lagoa Santa</span>
+          <span><i class="compare-line peers"></i>Demais municípios</span>
+        </div>
+      </div>
+      <div class="compare-chart-wrap">
+        <svg id="compareTrendChart" viewBox="0 0 840 390" role="img" aria-label="Evolução do IDEB de Lagoa Santa e municípios comparáveis entre 2017 e 2025">
+          <g id="compareGrid"></g>
+          <g id="compareSeries"></g>
+          <g id="compareChartLabels"></g>
+        </svg>
+      </div>
+      <div class="compare-trend-note" id="compareTrendNote"></div>
+    </section>
+
+    <section class="section compare-side-card">
+      <div class="compare-side-tabs" role="tablist" aria-label="Leitura comparativa">
+        <button class="compare-side-tab active" type="button" data-compare-panel="ranking" aria-selected="true">Ranking 2025</button>
+        <button class="compare-side-tab" type="button" data-compare-panel="evolucao" aria-selected="false">Evolução 23→25</button>
+      </div>
+      <div class="compare-side-head" id="compareSideHead"></div>
+      <div class="compare-list" id="compareSideList"></div>
+      <div class="compare-side-foot" id="compareSideFoot"></div>
+    </section>
+  </div>
+
 </div>
 
 <script>
@@ -951,6 +1119,125 @@ const DATA = {
     ]
   }
 };
+
+
+const COMPARABLE_IDEB = {
+  years:[2017,2019,2021,2023,2025],
+  cities:[
+    {name:"Alfenas", values:[6.4,6.2,6.0,6.3,7.1]},
+    {name:"Itajubá", values:[6.9,6.6,6.1,6.6,6.4]},
+    {name:"Itaúna", values:[7.5,7.5,6.5,6.6,6.8]},
+    {name:"Ituiutaba", values:[6.5,6.3,6.0,6.1,6.1]},
+    {name:"João Monlevade", values:[6.4,6.6,5.7,6.3,6.4]},
+    {name:"Lagoa Santa", values:[6.4,6.2,5.9,5.9,6.2]},
+    {name:"Pará de Minas", values:[6.5,6.6,5.9,6.0,6.5]},
+    {name:"Patrocínio", values:[7.4,7.4,7.0,6.6,6.4]},
+    {name:"São João del Rei", values:[6.2,6.2,5.9,6.0,6.7]},
+    {name:"Viçosa", values:[6.0,5.9,5.2,6.2,5.8]}
+  ]
+};
+
+let comparePanel = "ranking";
+
+function compareCompetitionRanks(rows){
+  const sorted=[...rows].sort((a,b)=>b.value-a.value || a.name.localeCompare(b.name,"pt-BR",{sensitivity:"base"}));
+  let prev=null,rank=0;
+  return sorted.map((d,i)=>{
+    if(d.value!==prev) rank=i+1;
+    prev=d.value;
+    return {...d,rank};
+  });
+}
+
+function renderCompareTrend(){
+  const grid=document.getElementById("compareGrid");
+  const series=document.getElementById("compareSeries");
+  const labels=document.getElementById("compareChartLabels");
+  if(!grid||!series||!labels)return;
+
+  grid.innerHTML="";series.innerHTML="";labels.innerHTML="";
+  const W=840,H=390,left=48,right=34,top=24,bottom=42;
+  const yMin=5.0,yMax=7.6;
+  const years=COMPARABLE_IDEB.years;
+  const x=i=>left+i*((W-left-right)/(years.length-1));
+  const y=v=>top+(yMax-v)*((H-top-bottom)/(yMax-yMin));
+
+  for(let t=5.0;t<=7.5+.001;t+=.5){
+    grid.innerHTML+=`<line class="compare-grid-line" x1="${left}" y1="${y(t)}" x2="${W-right}" y2="${y(t)}"></line>`;
+    labels.innerHTML+=`<text class="compare-axis" x="${left-9}" y="${y(t)+4}" text-anchor="end">${fmt(t)}</text>`;
+  }
+  years.forEach((yr,i)=>{
+    grid.innerHTML+=`<line class="compare-grid-line" x1="${x(i)}" y1="${top}" x2="${x(i)}" y2="${H-bottom}"></line>`;
+    labels.innerHTML+=`<text class="compare-axis" x="${x(i)}" y="${H-bottom+20}" text-anchor="middle">${yr}</text>`;
+  });
+
+  COMPARABLE_IDEB.cities.filter(c=>c.name!=="Lagoa Santa").forEach(city=>{
+    const pts=city.values.map((v,i)=>`${x(i)},${y(v)}`).join(" ");
+    series.innerHTML+=`<polyline class="compare-peer-line" points="${pts}"><title>${city.name}</title></polyline>`;
+    city.values.forEach((v,i)=>{
+      series.innerHTML+=`<circle class="compare-peer-point" cx="${x(i)}" cy="${y(v)}" r="3.2"><title>${city.name} · ${years[i]}: ${fmt(v)}</title></circle>`;
+    });
+  });
+
+  const ls=COMPARABLE_IDEB.cities.find(c=>c.name==="Lagoa Santa");
+  const lsPts=ls.values.map((v,i)=>`${x(i)},${y(v)}`).join(" ");
+  series.innerHTML+=`<polyline class="compare-ls-line" points="${lsPts}"></polyline>`;
+  ls.values.forEach((v,i)=>{
+    series.innerHTML+=`<circle class="compare-ls-point" cx="${x(i)}" cy="${y(v)}" r="5.2"><title>Lagoa Santa · ${years[i]}: ${fmt(v)}</title></circle>`;
+    labels.innerHTML+=`<text class="compare-ls-label" x="${x(i)}" y="${y(v)-11}" text-anchor="middle">${fmt(v)}</text>`;
+  });
+
+  const peers=COMPARABLE_IDEB.cities.filter(c=>c.name!=="Lagoa Santa");
+  const idx23=years.indexOf(2023),idx25=years.indexOf(2025);
+  const peers23=peers.reduce((s,c)=>s+c.values[idx23],0)/peers.length;
+  const peers25=peers.reduce((s,c)=>s+c.values[idx25],0)/peers.length;
+  const peerDelta=peers25-peers23;
+
+  document.getElementById("compareTrendNote").innerHTML=
+    `De 2023 a 2025, Lagoa Santa cresceu <strong>+0,3</strong>, contra <strong>+${fmt(peerDelta)}</strong> na média das outras nove cidades. O município recuperou 60% da perda acumulada entre 2017 e 2023, embora o IDEB de 2025 ainda esteja 0,2 ponto abaixo do patamar de 2017.`;
+}
+
+function renderCompareSide(){
+  const head=document.getElementById("compareSideHead");
+  const root=document.getElementById("compareSideList");
+  const foot=document.getElementById("compareSideFoot");
+  if(!head||!root||!foot)return;
+
+  const years=COMPARABLE_IDEB.years;
+  const idx23=years.indexOf(2023),idx25=years.indexOf(2025);
+
+  if(comparePanel==="ranking"){
+    const ranked=compareCompetitionRanks(COMPARABLE_IDEB.cities.map(c=>({name:c.name,value:c.values[idx25]})));
+    head.textContent="Posição entre os 10 municípios em 2025";
+    root.innerHTML=ranked.map(d=>`
+      <div class="compare-row ${d.name==="Lagoa Santa"?"lagoa":""}">
+        <div class="compare-row-rank">${d.rank}º</div>
+        <div class="compare-row-name" title="${d.name}">${d.name}</div>
+        <div class="compare-row-value">${fmt(d.value)}</div>
+      </div>`).join("");
+    foot.innerHTML="Lagoa Santa passou do <strong>10º lugar em 2023</strong> para o <strong>8º em 2025</strong>, deixando a última posição do grupo.";
+  }else{
+    const rows=COMPARABLE_IDEB.cities.map(c=>({
+      name:c.name,
+      value:+(c.values[idx25]-c.values[idx23]).toFixed(1)
+    })).sort((a,b)=>b.value-a.value || a.name.localeCompare(b.name,"pt-BR",{sensitivity:"base"}));
+    head.textContent="Variação do IDEB entre 2023 e 2025";
+    root.innerHTML=rows.map((d,i)=>{
+      const cls=d.value>0?"up":d.value<0?"down":"";
+      return `<div class="compare-row ${d.name==="Lagoa Santa"?"lagoa":""}">
+        <div class="compare-row-rank">${i+1}º</div>
+        <div class="compare-row-name" title="${d.name}">${d.name}</div>
+        <div class="compare-row-value ${cls}">${d.value>0?"+":""}${fmt(d.value)}</div>
+      </div>`;
+    }).join("");
+    foot.innerHTML="Com <strong>+0,3 ponto</strong>, Lagoa Santa teve a <strong>4ª maior evolução</strong> do grupo no ciclo 2023–2025.";
+  }
+}
+
+function renderComparables(){
+  renderCompareTrend();
+  renderCompareSide();
+}
 
 let stage = "iniciais";
 
@@ -1281,11 +1568,13 @@ function render(){
   const municipal = document.getElementById("municipalView");
   const schools = document.getElementById("schoolsView");
   const participation = document.getElementById("participationView");
+  const comparables = document.getElementById("comparablesView");
 
   if(stage === "escolas"){
     municipal.hidden = true;
     schools.hidden = false;
     participation.hidden = true;
+    comparables.hidden = true;
     renderPodium();
     renderSchoolResults();
     renderSchoolAnalytics();
@@ -1296,13 +1585,24 @@ function render(){
     municipal.hidden = true;
     schools.hidden = true;
     participation.hidden = false;
+    comparables.hidden = true;
     renderParticipationView();
+    return;
+  }
+
+  if(stage === "comparaveis"){
+    municipal.hidden = true;
+    schools.hidden = true;
+    participation.hidden = true;
+    comparables.hidden = false;
+    renderComparables();
     return;
   }
 
   municipal.hidden = false;
   schools.hidden = true;
   participation.hidden = true;
+  comparables.hidden = true;
   const d = DATA[stage];
   document.getElementById("heroStage").textContent = d.label;
   document.getElementById("heroValue").textContent = fmt(d.ideb2025);
@@ -1412,6 +1712,19 @@ document.querySelectorAll("[data-school-stage]").forEach(btn=>{
     }else if(stage === "participacao"){
       renderParticipationView();
     }
+  });
+});
+
+
+document.querySelectorAll("[data-compare-panel]").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    comparePanel=btn.dataset.comparePanel;
+    document.querySelectorAll("[data-compare-panel]").forEach(b=>{
+      const active=b===btn;
+      b.classList.toggle("active",active);
+      b.setAttribute("aria-selected",active?"true":"false");
+    });
+    renderCompareSide();
   });
 });
 
