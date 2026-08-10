@@ -331,7 +331,7 @@
       #schoolsView{
         flex:1;min-height:0;
         display:grid;
-        grid-template-columns:minmax(0,1.12fr) minmax(0,.88fr);
+        grid-template-columns:minmax(0,.78fr) minmax(0,1.22fr);
         grid-template-rows:auto auto minmax(0,1fr);
         gap:10px 12px
       }
@@ -443,6 +443,33 @@
       }
     }
 
+  
+    /* ===== CAMADA ANALÍTICA ===== */
+    .distribution-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.distribution-card{border:1px solid var(--border);border-radius:14px;padding:12px;background:#fafbfd;display:grid;grid-template-columns:auto 1fr;gap:8px 10px;align-items:center}
+    .distribution-card .dist-icon{font-size:1.35rem}.distribution-card .dist-value{font-size:1.55rem;font-weight:900}.distribution-card .dist-label{font-size:.75rem;font-weight:800}.distribution-card .dist-share{grid-column:1/-1;font-size:.7rem;color:var(--muted)}
+    .dist-tenths{grid-column:1/-1;padding-top:5px;border-top:1px solid var(--border);font-size:.72rem;font-weight:850}
+    .distribution-card.improved .dist-tenths{color:var(--positive)}.distribution-card.declined .dist-tenths{color:#9b5b24}.distribution-card.stable .dist-tenths{color:var(--muted)}
+    .distribution-card.improved .dist-value{color:var(--positive)}.distribution-card.declined .dist-value{color:#9b5b24}.distribution-card.stable .dist-value{color:var(--muted)}
+    .evolution-ranking{display:grid;gap:3px}.evolution-row{display:grid;grid-template-columns:26px minmax(120px,1.35fr) minmax(90px,1.8fr) 48px;gap:6px;align-items:center;padding:2px 4px;border-radius:8px}.evolution-row:nth-child(even){background:#fbfcfd}
+    .evolution-rank{text-align:right;color:var(--muted);font-size:.68rem;font-weight:800}.evolution-name{font-size:.69rem;font-weight:750;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .evo-track{height:7px;background:#edf1f5;border-radius:999px;position:relative;overflow:hidden}.evo-track::after{content:"";position:absolute;left:50%;top:0;bottom:0;width:1px;background:#b8c5cf;z-index:2}
+    .evo-bar{position:absolute;top:0;height:100%;border-radius:999px;background:var(--positive)}.evo-bar.positive{left:50%}.evo-bar.negative{right:50%;background:#c37a3b}.evo-bar.neutral{left:calc(50% - 2px);width:4px!important;background:#9aa8b5}
+    .evolution-delta{text-align:right;font-size:.69rem;font-weight:900}.evolution-delta.positive{color:var(--positive)}.evolution-delta.negative{color:#9b5b24}.evolution-delta.neutral{color:var(--muted)}
+    .scatter-wrap{width:100%;overflow:hidden}#participationScatter{display:block;width:100%;height:auto;min-height:285px}.scatter-grid-line{stroke:#e1e8ee;stroke-width:1}.scatter-axis{fill:#738196;font-size:11px}.scatter-axis-title{fill:#526277;font-size:12px;font-weight:800}.scatter-point{fill:var(--primary);stroke:#fff;stroke-width:2;opacity:.88}.scatter-point:hover{opacity:1;stroke-width:3}.scatter-label{fill:#526277;font-size:9px;font-weight:750;paint-order:stroke;stroke:#fff;stroke-width:4px;stroke-linejoin:round}
+    .chart-network-line{fill:none;stroke:#8a9baa;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:7 7}.chart-network-point{fill:#fff;stroke:#8a9baa;stroke-width:3}.chart-network-label{fill:#687789;font-size:11px;font-weight:800}
+    .trend-legend{display:flex;gap:12px;align-items:center;justify-content:flex-end;flex-wrap:wrap;font-size:.7rem;color:var(--muted)}.trend-legend-item{display:inline-flex;align-items:center;gap:5px}.trend-legend-school,.trend-legend-network{display:inline-block;width:18px;height:3px;border-radius:99px}.trend-legend-school{background:var(--primary)}.trend-legend-network{height:0;border-top:2px dashed #8a9baa;border-radius:0;background:transparent}
+    @media(max-width:760px){.distribution-grid{grid-template-columns:1fr}.evolution-row{grid-template-columns:26px minmax(105px,1.35fr) minmax(80px,1.7fr) 48px;gap:6px}}
+    @media(min-width:901px){#schoolsView{overflow:auto;align-content:start;grid-auto-rows:auto;padding-right:2px}#schoolsView > .school-distribution-section{grid-column:1/-1;min-height:auto}#schoolEvolutionRankingSection{min-height:300px}#participationScatterSection{min-height:470px}.school-distribution-section .section-head{margin-bottom:7px}.distribution-card{padding:8px 10px}.distribution-card .dist-value{font-size:1.25rem}.distribution-card .dist-icon{font-size:1.15rem}#participationScatter{min-height:390px}}
+
+  
+    @media(min-width:901px){
+      .school-distribution-section{padding-top:12px!important;padding-bottom:12px!important}
+      .school-distribution-section .section-head{margin-bottom:5px!important}
+      .school-distribution-section .distribution-grid{gap:8px}
+      .school-distribution-section .distribution-card{padding:7px 9px}
+      .school-distribution-section .dist-tenths{padding-top:4px;font-size:.68rem}
+    }
+
   </style>
 </head>
 <body>
@@ -489,7 +516,7 @@
     <div class="section-head">
       <div>
         <h2>Vetor Norte · evolução 2023–2025</h2>
-        
+        <p class="section-desc">Comparação dos municípios informados, com destaque para Lagoa Santa.</p>
       </div>
       <div class="mini-legend"><span class="legend-dot"></span>Lagoa Santa</div>
     </div>
@@ -508,7 +535,7 @@
     <div class="section-head">
       <div>
         <h2>Ranking da RMBH · 2025</h2>
-       
+        <p class="section-desc">Posições por nota, preservando empates conforme os dados enviados.</p>
       </div>
       <div class="tools">
         <input class="search" id="searchRank" type="search" placeholder="Buscar município…" aria-label="Buscar município no ranking">
@@ -530,7 +557,7 @@
       <div class="podium-head">
         <div>
           <h2>Maiores evoluções por escola · 2023–2025</h2>
-          <p>Somente escolas com resultado divulgado nos dois anos.</p>
+          
         </div>
       </div>
       <div class="podium-grid" id="podiumGrid"></div>
@@ -578,7 +605,10 @@
           <h2 id="schoolTrendTitle">Evolução do IDEB por escola · Anos Iniciais</h2>
           <p class="section-desc" id="schoolTrendDesc">Selecione uma escola para visualizar a trajetória entre 2021 e 2025.</p>
         </div>
-        <div class="mini-legend">2021 · 2023 · 2025</div>
+        <div class="trend-legend" aria-label="Legenda do gráfico">
+          <span class="trend-legend-item"><span class="trend-legend-school"></span>Escola</span>
+          <span class="trend-legend-item"><span class="trend-legend-network"></span>Rede municipal</span>
+        </div>
       </div>
 <div class="school-select-wrap">
         <label for="schoolSelect" class="school-select-label">Selecione a escola</label>
@@ -602,8 +632,46 @@
       </div>
 
       <div class="footnote">
-        <strong>Leitura do gráfico:</strong> são exibidos somente os resultados do IDEB de 2021, 2023 e 2025. Quando 2021 está disponível, a variação compara 2021 com 2025; quando não há resultado em 2021, a comparação usa 2023 e 2025. O menu suspenso mostra apenas escolas com pelo menos um resultado divulgado entre 2021 e 2025.
+        <strong>Leitura do gráfico:</strong> são exibidos os resultados da escola em 2021, 2023 e 2025. A linha tracejada compara a escola ao IDEB municipal de Lagoa Santa em 2023 e 2025. Quando 2021 está disponível, a variação da escola compara 2021 com 2025; quando não há resultado em 2021, usa 2023 e 2025.
       </div>
+    </section>
+
+    <section class="section school-distribution-section">
+      <div class="section-head">
+        <div>
+          <h2>Distribuição da evolução · 2023–2025</h2>
+          
+        </div>
+      </div>
+      <div class="distribution-grid" id="distributionGrid"></div>
+      
+    </section>
+
+    <section class="section" id="schoolEvolutionRankingSection">
+      <div class="section-head">
+        <div>
+          <h2>Ranking de evolução das escolas · 2023–2025</h2>
+          <p class="section-desc">Ordenação pela variação do IDEB. Escolas sem resultado em um dos dois anos não entram no ranking.</p>
+        </div>
+      </div>
+      <div class="evolution-ranking" id="schoolEvolutionRanking"></div>
+    </section>
+
+    <section class="section" id="participationScatterSection">
+      <div class="section-head">
+        <div>
+          <h2>Participação no Saeb × IDEB 2025</h2>
+          <p class="section-desc">Cada ponto representa uma escola com os dois indicadores disponíveis.</p>
+        </div>
+      </div>
+      <div class="scatter-wrap">
+        <svg id="participationScatter" viewBox="0 0 860 460" role="img" aria-label="Gráfico de dispersão entre participação no Saeb e IDEB 2025 por escola">
+          <g id="scatterGrid"></g>
+          <g id="scatterSeries"></g>
+          <g id="scatterLabels"></g>
+        </svg>
+      </div>
+      <div class="footnote">Leitura exploratória: o gráfico ajuda a identificar padrões e pontos fora da curva, mas não demonstra relação causal entre participação e desempenho.</div>
     </section>
   </div>
 
@@ -864,6 +932,20 @@ function drawSchoolTrend(school){
   });
   flush();
 
+  // Comparativo com o IDEB municipal de Lagoa Santa.
+  const municipal = schoolStage === "quinto"
+    ? {2021:null, 2023:DATA.iniciais.ideb2023, 2025:DATA.iniciais.ideb2025}
+    : {2021:null, 2023:DATA.finais.ideb2023, 2025:DATA.finais.ideb2025};
+  const municipalAvailable = years.map((year,index)=>({year,index,value:municipal[year]})).filter(d=>d.value !== null);
+  if(municipalAvailable.length>1){
+    const pts=municipalAvailable.map(d=>`${x(d.index)},${y(d.value)}`).join(" ");
+    series.innerHTML += `<polyline class="chart-network-line" points="${pts}"></polyline>`;
+  }
+  municipalAvailable.forEach(d=>{
+    series.innerHTML += `<circle class="chart-network-point" cx="${x(d.index)}" cy="${y(d.value)}" r="5"></circle>`;
+    labels.innerHTML += `<text class="chart-network-label" x="${x(d.index)}" y="${y(d.value)+20}" text-anchor="middle">Rede ${fmt(d.value)}</text>`;
+  });
+
   available.forEach((d,idx)=>{
     const i = years.indexOf(d.year);
     const delay = (idx*120)+250;
@@ -939,6 +1021,113 @@ function renderPodium(){
   `).join("");
 }
 
+
+function getComparableSchoolEvolution(){
+  const source=schoolStage==="quinto"?SCHOOL_IDEB_5:SCHOOL_IDEB_9;
+  return source.filter(s=>s.values[2023]!==null&&s.values[2025]!==null).map(s=>({name:s.name,v2023:s.values[2023],v2025:s.values[2025],delta:+(s.values[2025]-s.values[2023]).toFixed(1)})).sort((a,b)=>b.delta-a.delta||a.name.localeCompare(b.name,"pt-BR",{sensitivity:"base"}));
+}
+function renderSchoolDistribution(){
+  const root=document.getElementById("distributionGrid");
+  if(!root)return;
+
+  const rows=getComparableSchoolEvolution(),total=rows.length;
+  const improvedRows=rows.filter(x=>x.delta>0);
+  const stableRows=rows.filter(x=>x.delta===0);
+  const declinedRows=rows.filter(x=>x.delta<0);
+
+  const improved=improvedRows.length;
+  const stable=stableRows.length;
+  const declined=declinedRows.length;
+
+  const gainedTenths=Math.round(improvedRows.reduce((sum,x)=>sum+x.delta,0)*10);
+  const lostTenths=Math.round(Math.abs(declinedRows.reduce((sum,x)=>sum+x.delta,0))*10);
+  const pct=n=>total?((n/total)*100).toLocaleString("pt-BR",{maximumFractionDigits:1}):"0";
+
+  root.innerHTML=`
+    <article class="distribution-card improved">
+      <div class="dist-icon">↗</div>
+      <div><div class="dist-value">${improved}</div><div class="dist-label">Melhoraram</div></div>
+      <div class="dist-share">${pct(improved)}% das comparáveis</div>
+      <div class="dist-tenths">+${gainedTenths} décimos de IDEB somados</div>
+    </article>
+    <article class="distribution-card stable">
+      <div class="dist-icon">→</div>
+      <div><div class="dist-value">${stable}</div><div class="dist-label">Estáveis</div></div>
+      <div class="dist-share">${pct(stable)}% das comparáveis</div>
+      <div class="dist-tenths">0 décimo de variação</div>
+    </article>
+    <article class="distribution-card declined">
+      <div class="dist-icon">↘</div>
+      <div><div class="dist-value">${declined}</div><div class="dist-label">Caíram</div></div>
+      <div class="dist-share">${pct(declined)}% das comparáveis</div>
+      <div class="dist-tenths">−${lostTenths} décimos de IDEB somados</div>
+    </article>`;
+}
+function renderSchoolEvolutionRanking(){
+  const root=document.getElementById("schoolEvolutionRanking");if(!root)return;const rows=getComparableSchoolEvolution();if(!rows.length){root.innerHTML='<div class="footnote">Não há escolas com resultados comparáveis em 2023 e 2025.</div>';return;}const maxAbs=Math.max(...rows.map(x=>Math.abs(x.delta)),.1);
+  root.innerHTML=rows.map((s,i)=>{const width=Math.max(2,Math.abs(s.delta)/maxAbs*50),cls=s.delta>0?"positive":s.delta<0?"negative":"neutral",deltaText=`${s.delta>0?"+":""}${fmt(s.delta)}`;return `<div class="evolution-row"><div class="evolution-rank">${i+1}º</div><div class="evolution-name" title="${s.name}">${s.name}</div><div class="evo-track" aria-label="${s.name}: variação ${deltaText}"><div class="evo-bar ${cls}" style="width:${width}%"></div></div><div class="evolution-delta ${cls}">${deltaText}</div></div>`;}).join("");
+}
+function shortSchoolName(name){
+  const cleaned=name.replace(/^ESCOLA MUNICIPAL\s+/i,"").replace(/^EM\s+/i,"").replace(/^PROFESSORA\s+/i,"PROFª ").replace(/^PROFº\s+/i,"PROF. ").replace(/^PROFª\s+/i,"PROFª ").replace(/\s+-\s+SENHOR TITO$/i," · TITO");
+  const aliases={
+    "ALBERTO SANTOS DUMONT":"ALBERTO S. DUMONT",
+    "CORONEL PEDRO VIEIRA DE FREITAS":"CEL. PEDRO VIEIRA",
+    "DONA MARIA AUGUSTA":"D. MARIA AUGUSTA",
+    "HERCULANO LIBERATO DE ALMEIDA":"HERCULANO LIBERATO",
+    "LIVIO MUCIO CONRADO SILVA · TITO":"LÍVIO MÚCIO · TITO",
+    "PROFESSORA CLAUDOMIRA":"PROFª CLAUDOMIRA",
+    "PROFª MERCIA MARGARIDA LACERDA MACHADO":"PROFª MÉRCIA"
+  };
+  return aliases[cleaned]||cleaned;
+}
+function renderParticipationScatter(){
+  const svg=document.getElementById("participationScatter");if(!svg)return;const grid=document.getElementById("scatterGrid"),series=document.getElementById("scatterSeries"),labels=document.getElementById("scatterLabels");grid.innerHTML="";series.innerHTML="";labels.innerHTML="";
+  const participation=SCHOOL_PARTICIPATION[schoolStage],idebSource=schoolStage==="quinto"?SCHOOL_IDEB_5:SCHOOL_IDEB_9,idebMap=new Map(idebSource.map(s=>[s.name,s.values[2025]]));
+  const points=participation.map(([name,enrolled,present])=>({name,participation:(present/enrolled)*100,ideb:idebMap.get(name)})).filter(d=>d.ideb!==null&&d.ideb!==undefined);if(!points.length)return;
+  const W=860,H=460,left=68,right=52,top=32,bottom=60,minX=Math.floor(Math.min(...points.map(d=>d.participation),80)/5)*5,maxX=Math.ceil(Math.max(...points.map(d=>d.participation),105)/5)*5,minY=schoolStage==="quinto"?5.0:4.0,maxY=schoolStage==="quinto"?7.5:5.5;
+  const x=v=>left+(v-minX)*((W-left-right)/(maxX-minX||1)),y=v=>top+(maxY-v)*((H-top-bottom)/(maxY-minY||1));
+  for(let t=minX;t<=maxX;t+=5){grid.innerHTML+=`<line class="scatter-grid-line" x1="${x(t)}" y1="${top}" x2="${x(t)}" y2="${H-bottom}"></line>`;labels.innerHTML+=`<text class="scatter-axis" x="${x(t)}" y="${H-bottom+20}" text-anchor="middle">${t}%</text>`;}
+  for(let t=minY;t<=maxY+.001;t+=.5){grid.innerHTML+=`<line class="scatter-grid-line" x1="${left}" y1="${y(t)}" x2="${W-right}" y2="${y(t)}"></line>`;labels.innerHTML+=`<text class="scatter-axis" x="${left-10}" y="${y(t)+4}" text-anchor="end">${t.toLocaleString("pt-BR",{minimumFractionDigits:1})}</text>`;}
+  labels.innerHTML+=`<text class="scatter-axis-title" x="${(left+W-right)/2}" y="${H-12}" text-anchor="middle">Participação no Saeb</text><text class="scatter-axis-title" transform="translate(17 ${(top+H-bottom)/2}) rotate(-90)" text-anchor="middle">IDEB 2025</text>`;
+  const placedLabels=[];
+  const candidates=[
+    {dx:10,dy:-12,anchor:"start"},{dx:10,dy:18,anchor:"start"},
+    {dx:-10,dy:-12,anchor:"end"},{dx:-10,dy:18,anchor:"end"},
+    {dx:0,dy:-20,anchor:"middle"},{dx:0,dy:26,anchor:"middle"},
+    {dx:18,dy:-28,anchor:"start"},{dx:-18,dy:-28,anchor:"end"},
+    {dx:18,dy:32,anchor:"start"},{dx:-18,dy:32,anchor:"end"}
+  ];
+  const estimateBox=(text,tx,ty,anchor)=>{const w=Math.max(38,text.length*5.1),h=13;let l=tx;if(anchor==="middle")l=tx-w/2;if(anchor==="end")l=tx-w;return{left:l,right:l+w,top:ty-h+2,bottom:ty+3};};
+  const overlaps=(a,b)=>!(a.right+3<b.left||a.left-3>b.right||a.bottom+3<b.top||a.top-3>b.bottom);
+
+  points.slice().sort((a,b)=>a.ideb-b.ideb||a.participation-b.participation).forEach(d=>{
+    const px=x(d.participation),py=y(d.ideb),text=shortSchoolName(d.name);
+    let chosen=null;
+    for(const c of candidates){
+      const tx=px+c.dx,ty=py+c.dy,box=estimateBox(text,tx,ty,c.anchor);
+      const inside=box.left>=left&&box.right<=W-right&&box.top>=top&&box.bottom<=H-bottom;
+      if(inside&&!placedLabels.some(p=>overlaps(box,p.box))){chosen={...c,tx,ty,box};break;}
+    }
+    if(!chosen){
+      let best=null;
+      for(const c of candidates){
+        const tx=Math.min(W-right-2,Math.max(left+2,px+c.dx));
+        const ty=Math.min(H-bottom-3,Math.max(top+12,py+c.dy));
+        const box=estimateBox(text,tx,ty,c.anchor);
+        const collisions=placedLabels.filter(p=>overlaps(box,p.box)).length;
+        if(!best||collisions<best.collisions)best={...c,tx,ty,box,collisions};
+      }
+      chosen=best;
+    }
+    placedLabels.push({box:chosen.box,name:d.name});
+    series.innerHTML+=`<circle class="scatter-point" cx="${px}" cy="${py}" r="6"><title>${d.name} · Participação ${d.participation.toLocaleString("pt-BR",{minimumFractionDigits:1,maximumFractionDigits:1})}% · IDEB ${fmt(d.ideb)}</title></circle>`;
+    const lx=chosen.tx+(chosen.anchor==="start"?-3:chosen.anchor==="end"?3:0),ly=chosen.ty+(chosen.dy<0?4:-9);
+    labels.innerHTML+=`<line x1="${px}" y1="${py}" x2="${lx}" y2="${ly}" stroke="#c3ced7" stroke-width="1"></line>`;
+    labels.innerHTML+=`<text class="scatter-label" x="${chosen.tx}" y="${chosen.ty}" text-anchor="${chosen.anchor}">${text}</text>`;
+  });
+}
+function renderSchoolAnalytics(){renderSchoolDistribution();renderSchoolEvolutionRanking();renderParticipationScatter();}
+
 function render(){
   const municipal = document.getElementById("municipalView");
   const schools = document.getElementById("schoolsView");
@@ -948,6 +1137,7 @@ function render(){
     renderPodium();
     renderSchools();
     renderSchoolResults();
+    renderSchoolAnalytics();
     return;
   }
   municipal.hidden = false;
@@ -1057,6 +1247,7 @@ document.querySelectorAll("[data-school-stage]").forEach(btn=>{
     renderPodium();
     renderSchools();
     renderSchoolResults();
+    renderSchoolAnalytics();
   });
 });
 
