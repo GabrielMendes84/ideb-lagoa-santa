@@ -206,8 +206,8 @@
     .school-summary-text{color:var(--muted);font-size:.9rem;line-height:1.4}
     .school-bars{display:grid;gap:6px;margin-top:6px}
     .school-row{
-      display:grid;grid-template-columns:minmax(205px,1.8fr) 86px 86px minmax(150px,2.5fr) 64px;
-      gap:8px;align-items:center;padding:6px 8px;border-bottom:1px solid #edf1f5
+      display:grid;grid-template-columns:minmax(150px,1.5fr) minmax(120px,2fr) 58px;
+      gap:7px;align-items:center;padding:4px 6px;border-bottom:1px solid #edf1f5
     }
     .school-row:nth-child(even){background:#fbfcfd;border-radius:10px}
     .school-name{font-size:.9rem;font-weight:700}
@@ -470,6 +470,142 @@
       .school-distribution-section .dist-tenths{padding-top:4px;font-size:.68rem}
     }
 
+  
+    #participationView[hidden]{display:none!important}
+
+    @media(min-width:901px){
+      #participationView{
+        flex:1;
+        min-height:0;
+        display:grid;
+        grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr);
+        grid-template-rows:auto minmax(0,1fr);
+        gap:10px 12px;
+      }
+      #participationView > .school-global-tabs{grid-column:1/-1}
+      #participationView > .section{
+        margin:0;
+        min-height:0;
+        overflow:auto;
+        border-radius:17px;
+      }
+      #participationView .school-participation-card{padding:13px 15px 12px}
+      #participationView #participationScatterSection{
+        min-height:0;
+        padding:13px 15px 12px;
+      }
+      #participationView #participationScatter{
+        min-height:0;
+        width:100%;
+        height:auto;
+      }
+    }
+
+    @media(max-width:900px){
+      #participationView{display:block}
+      #participationView > .school-global-tabs{margin-bottom:10px}
+      #participationView > .section{margin-top:12px}
+    }
+
+  
+    .participation-insights{
+      display:grid;
+      grid-template-columns:1fr;
+    }
+    .participation-insights .school-note{
+      margin:0;
+      height:100%;
+    }
+    .participation-relevance .school-note{
+      padding:11px 14px;
+    }
+
+    .participation-insights .school-note p{
+      margin:5px 0 0;
+    }
+
+    @media(min-width:901px){
+      #participationView{
+        grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr);
+        grid-template-rows:auto auto auto minmax(0,1fr);
+      }
+      #participationView > .participation-insights{
+        grid-column:1 / -1;
+      }
+      #participationView .participation-relevance{
+        grid-column:1 / -1;
+      }
+      #participationView .participation-relevance .school-note{
+        background:var(--positive-bg);
+        border-color:#cfe9dc;
+      }
+
+    }
+
+    @media(max-width:900px){
+      .participation-insights{
+        margin-bottom:10px;
+      }
+    }
+
+  
+    @media(min-width:901px){
+      #participationView .school-participation-card .section-head{
+        margin-bottom:7px;
+      }
+      #participationView .school-participation-card .school-summary{
+        margin:3px 0 9px;
+        padding:8px 10px;
+      }
+      #participationView .school-participation-card .school-summary-number{
+        width:40px;height:40px;font-size:1.1rem;
+      }
+      #participationView .school-participation-card .school-summary-label{
+        font-size:.76rem;
+      }
+      #participationView .school-participation-card .school-summary-text{
+        font-size:.69rem;
+      }
+      #participationView .school-participation-card .footnote{
+        margin-top:8px;
+        padding:8px 10px;
+      }
+    }
+
+  
+    .participation-over100-wide{
+      width:100%;
+      margin:10px 0 8px;
+    }
+    .participation-over100-wide .school-note{
+      width:100%;
+      margin:0;
+      padding:10px 13px;
+      background:#fafbfd;
+    }
+    .participation-over100-wide .school-note p{
+      margin:5px 0 0;
+    }
+
+    @media(min-width:901px){
+      #participationView .participation-over100-wide{
+        margin-top:9px;
+      }
+      #participationView .participation-over100-wide .school-note{
+        padding:9px 12px;
+      }
+    }
+
+  
+    @media(min-width:901px){
+      #participationView .school-bars{gap:3px!important}
+      #participationView .school-row{padding:3px 5px!important;gap:6px!important}
+      #participationView .school-name{font-size:.69rem}
+      #participationView .school-rate{font-size:.72rem}
+      #participationView .participation-over100-wide{margin:7px 0 6px}
+      #participationView .participation-over100-wide .school-note{padding:8px 11px}
+    }
+
   </style>
 </head>
 <body>
@@ -490,6 +626,7 @@
     <button class="tab active" id="tab-iniciais" data-stage="iniciais" role="tab" aria-selected="true">Anos iniciais</button>
     <button class="tab" id="tab-finais" data-stage="finais" role="tab" aria-selected="false">Anos finais</button>
     <button class="tab" id="tab-escolas" data-stage="escolas" role="tab" aria-selected="false">Por escola</button>
+    <button class="tab" id="tab-participacao" data-stage="participacao" role="tab" aria-selected="false">Participação</button>
   </div>
 
   <div id="municipalView">
@@ -563,42 +700,6 @@
       <div class="podium-grid" id="podiumGrid"></div>
     </section>
 
-    <section class="section school-participation-card">
-      <div class="section-head">
-        <div>
-          <h2>Participação no Saeb por escola</h2>
-          <p class="section-desc">Alunos presentes na avaliação em relação ao total de matrículas de referência do Censo Escolar.</p>
-        </div>
-        <div class="mini-legend"><span class="legend-dot"></span>Taxa de participação</div>
-      </div>
-<div class="school-summary">
-        <div class="school-summary-number" id="schoolCount">13</div>
-        <div>
-          <div class="school-summary-label" id="schoolSummaryLabel">escolas dos Anos Iniciais no recorte</div>
-          <div class="school-summary-text">A participação elevada aumenta a representatividade do resultado do Saeb e, consequentemente, a confiabilidade da leitura do IDEB.</div>
-        </div>
-      </div>
-
-      <div class="school-bars" id="schoolParticipation"></div>
-
-      <div class="school-notes">
-        <article class="school-note">
-          <div class="note-kicker">Por que há taxas acima de 100%?</div>
-          <p>O denominador usa as matrículas de referência do Censo Escolar. Alunos admitidos depois da data-base podem fazer o Saeb por meio de provas extras e ser contabilizados como participantes, embora não integrem aquele total inicial de matrículas. Por isso, em algumas escolas, o número de presentes pode superar o número usado como referência e a taxa ultrapassar 100%.</p>
-          <a href="https://www.gov.br/inep/pt-br/acesso-a-informacao/perguntas-frequentes/sistema-de-avaliacao-da-educacao-basica-saeb/calculo-de-proficiencia/alunos-transferidos-apos-a-data-base" target="_blank" rel="noreferrer">Fonte: Inep</a>
-        </article>
-
-        <article class="school-note important">
-          <div class="attention-kicker"><span class="attention-icon" aria-hidden="true">⚠️</span><span>Por que esse dado é relevante?</span></div>
-          <p>Além de uma alta frequência garantir o cumprimento da Condicionalidade II do VAAR, o desempenho médio é mais preciso quando há uma alta taxa de participação. Uma participação baixa pode criar <strong>viés de seleção</strong>: se alunos de menor desempenho deixam de fazer a prova, a média observada pode ficar artificialmente acima da aprendizagem real, e em muitas redes isso ocorre de forma intencional, algo que <strong>não aconteceu em Lagoa Santa, onde a participação foi alta na maioria das escolas</strong>. A participação próxima de 100% reduz esse risco e torna a comparação entre escolas e redes mais robusta.</p>
-        </article>
-      </div>
-
-      <div class="footnote">
-        <strong>Leitura do indicador:</strong> a taxa mostrada aqui é participação na avaliação, e não frequência escolar cotidiana. Os dados exibidos são de 2025. Linhas repetidas com os mesmos valores foram consolidadas em um único registro por escola e série.
-      </div>
-    </section>
-
     <section class="section" id="schoolResultsSection">
       <div class="section-head">
         <div>
@@ -657,6 +758,56 @@
       <div class="evolution-ranking" id="schoolEvolutionRanking"></div>
     </section>
 
+  </div>
+
+  
+  <div id="participationView" hidden>
+    <div class="school-global-tabs" role="tablist" aria-label="Etapa das informações de participação">
+      <button class="school-subtab active" data-school-stage="quinto" role="tab" aria-selected="true">Anos Iniciais</button>
+      <button class="school-subtab" data-school-stage="nono" role="tab" aria-selected="false">Anos Finais</button>
+    </div>
+
+    <div class="participation-insights">
+      <div class="participation-relevance">
+        <article class="school-note important">
+          <div class="attention-kicker"><span class="attention-icon" aria-hidden="true">⚠️</span><span>Por que esse dado é relevante?</span></div>
+          <p>Além de uma alta frequência garantir o cumprimento da Condicionalidade II do VAAR, o desempenho médio é mais preciso quando há uma alta taxa de participação. Uma participação baixa pode criar <strong>viés de seleção</strong>: se alunos de menor desempenho deixam de fazer a prova, a média observada pode ficar artificialmente acima da aprendizagem real, e em muitas redes isso ocorre de forma intencional, algo que <strong>não aconteceu em Lagoa Santa, onde a participação foi alta na maioria das escolas</strong>. A participação próxima de 100% reduz esse risco e torna a comparação entre escolas e redes mais robusta.</p>
+        </article>
+      </div>
+    </div>
+
+    <section class="section school-participation-card">
+      <div class="section-head">
+        <div>
+          <h2>Participação no Saeb por escola</h2>
+          <p class="section-desc">Alunos presentes na avaliação em relação ao total de matrículas de referência do Censo Escolar.</p>
+        </div>
+        <div class="mini-legend"><span class="legend-dot"></span>Taxa de participação</div>
+      </div>
+<div class="school-summary">
+        <div class="school-summary-number" id="schoolCount">13</div>
+        <div>
+          <div class="school-summary-label" id="schoolSummaryLabel">escolas dos Anos Iniciais no recorte</div>
+          <div class="school-summary-text">A participação elevada aumenta a representatividade do resultado do Saeb e, consequentemente, a confiabilidade da leitura do IDEB.</div>
+        </div>
+      </div>
+
+      <div class="school-bars" id="schoolParticipation"></div>
+
+      <div class="participation-over100-wide">
+        <article class="school-note">
+          <div class="note-kicker">Por que há taxas acima de 100%?</div>
+          <p>O denominador usa as matrículas de referência do Censo Escolar. Alunos admitidos depois da data-base podem fazer o Saeb por meio de provas extras e ser contabilizados como participantes, embora não integrem aquele total inicial de matrículas. Por isso, em algumas escolas, o número de presentes pode superar o número usado como referência e a taxa ultrapassar 100%.</p>
+          <a href="https://www.gov.br/inep/pt-br/acesso-a-informacao/perguntas-frequentes/sistema-de-avaliacao-da-educacao-basica-saeb/calculo-de-proficiencia/alunos-transferidos-apos-a-data-base" target="_blank" rel="noreferrer">Fonte: Inep</a>
+        </article>
+      </div>
+
+      <div class="footnote">
+        <strong>Leitura do indicador:</strong> a taxa mostrada aqui é participação na avaliação, e não frequência escolar cotidiana. Os dados exibidos são de 2025. Linhas repetidas com os mesmos valores foram consolidadas em um único registro por escola e série.
+      </div>
+    </section>
+
+
     <section class="section" id="participationScatterSection">
       <div class="section-head">
         <div>
@@ -675,7 +826,6 @@
     </section>
   </div>
 
-  
 </div>
 
 <script>
@@ -977,8 +1127,6 @@ function renderSchools(){
     const width = Math.min(rate,110) / 110 * 100;
     return `<div class="school-row">
       <div class="school-name">${name}</div>
-      <div class="school-count" title="Matrículas de referência">Censo ${enrolled}</div>
-      <div class="school-count" title="Presentes no Saeb">Presentes ${present}</div>
       <div class="school-track" aria-label="${name}: ${rate.toLocaleString("pt-BR",{minimumFractionDigits:1,maximumFractionDigits:1})}%">
         <div class="school-fill" style="width:${width}%"></div>
       </div>
@@ -1126,22 +1274,35 @@ function renderParticipationScatter(){
     labels.innerHTML+=`<text class="scatter-label" x="${chosen.tx}" y="${chosen.ty}" text-anchor="${chosen.anchor}">${text}</text>`;
   });
 }
-function renderSchoolAnalytics(){renderSchoolDistribution();renderSchoolEvolutionRanking();renderParticipationScatter();}
+function renderSchoolAnalytics(){renderSchoolDistribution();renderSchoolEvolutionRanking();}
+function renderParticipationView(){renderSchools();renderParticipationScatter();}
 
 function render(){
   const municipal = document.getElementById("municipalView");
   const schools = document.getElementById("schoolsView");
+  const participation = document.getElementById("participationView");
+
   if(stage === "escolas"){
     municipal.hidden = true;
     schools.hidden = false;
+    participation.hidden = true;
     renderPodium();
-    renderSchools();
     renderSchoolResults();
     renderSchoolAnalytics();
     return;
   }
+
+  if(stage === "participacao"){
+    municipal.hidden = true;
+    schools.hidden = true;
+    participation.hidden = false;
+    renderParticipationView();
+    return;
+  }
+
   municipal.hidden = false;
   schools.hidden = true;
+  participation.hidden = true;
   const d = DATA[stage];
   document.getElementById("heroStage").textContent = d.label;
   document.getElementById("heroValue").textContent = fmt(d.ideb2025);
@@ -1229,7 +1390,7 @@ document.querySelectorAll(".tab").forEach(btn=>{
   });
 });
 document.getElementById("searchRank").addEventListener("input",()=>{
-  if(stage !== "escolas") renderRanking();
+  if(stage === "iniciais" || stage === "finais") renderRanking();
 });
 
 
@@ -1243,11 +1404,14 @@ document.querySelectorAll("[data-school-stage]").forEach(btn=>{
       b.setAttribute("aria-selected", active ? "true" : "false");
     });
 
-    // Um único clique atualiza toda a aba Por Escola.
-    renderPodium();
-    renderSchools();
-    renderSchoolResults();
-    renderSchoolAnalytics();
+    // Os seletores ficam sincronizados e atualizam a aba ativa.
+    if(stage === "escolas"){
+      renderPodium();
+      renderSchoolResults();
+      renderSchoolAnalytics();
+    }else if(stage === "participacao"){
+      renderParticipationView();
+    }
   });
 });
 
