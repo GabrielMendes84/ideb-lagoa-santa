@@ -874,6 +874,53 @@
       }
     }
 
+  
+    .compare-stage-tabs{
+      display:flex;gap:5px;padding:4px;background:#e8eef4;border-radius:12px;
+      width:max-content;max-width:100%
+    }
+    .compare-stage-tab{
+      appearance:none;border:0;background:transparent;color:var(--muted);
+      padding:7px 12px;border-radius:9px;font:inherit;font-size:.76rem;
+      font-weight:850;cursor:pointer;white-space:nowrap
+    }
+    .compare-stage-tab.active{
+      background:#fff;color:var(--primary);box-shadow:0 2px 8px rgba(30,60,90,.08)
+    }
+
+    @media(min-width:901px){
+      #comparablesView{
+        grid-template-rows:auto auto auto minmax(0,1fr)!important;
+      }
+      #comparablesView > .compare-stage-tabs{
+        grid-column:1 / -1;
+        grid-row:1;
+      }
+      #comparablesView > .compare-callout{
+        grid-column:1 / -1;
+        grid-row:2;
+      }
+      #comparablesView > .compare-kpis{
+        grid-column:1 / -1;
+        grid-row:3;
+      }
+      #comparablesView > .compare-trend-card{
+        grid-column:1;
+        grid-row:4;
+      }
+      #comparablesView > .compare-side-card{
+        grid-column:2;
+        grid-row:4;
+      }
+    }
+
+    @media(max-width:900px){
+      .compare-stage-tabs{
+        margin-bottom:10px;
+        overflow-x:auto;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -1097,41 +1144,46 @@
 
 
   <div id="comparablesView" hidden>
+    <div class="compare-stage-tabs" role="tablist" aria-label="Etapa da comparação entre municípios">
+      <button class="compare-stage-tab active" type="button" data-compare-stage="iniciais" aria-selected="true">Anos Iniciais</button>
+      <button class="compare-stage-tab" type="button" data-compare-stage="finais" aria-selected="false">Anos Finais</button>
+    </div>
+
     <section class="compare-callout">
       <div>
-        <div class="compare-kicker">Benchmark demográfico · Anos iniciais</div>
-        <strong>Em 2025, Lagoa Santa interrompeu a trajetória de queda e estagnação, cresceu acima da média dos municípios mineiros com perfil demográfico semelhante e deixou a última posição do grupo.</strong>
+        <div class="compare-kicker" id="compareKicker">Benchmark demográfico · Anos Iniciais</div>
+        <strong id="compareCalloutText"></strong>
       </div>
-      <div class="compare-callout-note">Grupo: Alfenas, Itajubá, Itaúna, Ituiutaba, João Monlevade, Lagoa Santa, Pará de Minas, Patrocínio, São João del Rei e Viçosa.</div>
+      <div class="compare-callout-note" id="compareGroupNote"></div>
     </section>
 
     <section class="compare-kpis">
       <article class="compare-kpi">
         <div class="compare-kpi-label">Evolução 2023–2025</div>
-        <div class="compare-kpi-value positive">+0,3</div>
-        <div class="compare-kpi-note">IDEB · 5,9 → 6,2</div>
+        <div class="compare-kpi-value positive" id="compareKpiDelta"></div>
+        <div class="compare-kpi-note" id="compareKpiDeltaNote"></div>
       </article>
       <article class="compare-kpi">
         <div class="compare-kpi-label">Posição no grupo</div>
-        <div class="compare-kpi-value">10º → 8º</div>
-        <div class="compare-kpi-note">avanço de 2 posições</div>
+        <div class="compare-kpi-value" id="compareKpiRank"></div>
+        <div class="compare-kpi-note" id="compareKpiRankNote"></div>
       </article>
       <article class="compare-kpi">
         <div class="compare-kpi-label">Velocidade de melhora</div>
-        <div class="compare-kpi-value">4ª</div>
-        <div class="compare-kpi-note">maior evolução entre 10 cidades</div>
+        <div class="compare-kpi-value" id="compareKpiEvolutionRank"></div>
+        <div class="compare-kpi-note" id="compareKpiEvolutionNote"></div>
       </article>
       <article class="compare-kpi">
-        <div class="compare-kpi-label">Recuperação histórica</div>
-        <div class="compare-kpi-value">60%</div>
-        <div class="compare-kpi-note">da perda acumulada de 2017 a 2023</div>
+        <div class="compare-kpi-label" id="compareKpiHistoryLabel">Recuperação histórica</div>
+        <div class="compare-kpi-value" id="compareKpiRecovery"></div>
+        <div class="compare-kpi-note" id="compareKpiRecoveryNote"></div>
       </article>
     </section>
 
     <section class="section compare-trend-card">
       <div class="section-head">
         <div>
-          <h2>Trajetória do IDEB · 2017–2025</h2>
+          <h2 id="compareTrendTitle">Trajetória do IDEB · 2017–2025</h2>
           <p class="section-desc">Lagoa Santa em destaque; as demais linhas representam municípios do grupo comparativo.</p>
         </div>
         <div class="compare-legend">
@@ -1288,34 +1340,159 @@ const DATA = {
 
 
 const COMPARABLE_IDEB = {
-  years:[2017,2019,2021,2023,2025],
-  cities:[
-    {name:"Alfenas", values:[6.4,6.2,6.0,6.3,7.1]},
-    {name:"Itajubá", values:[6.9,6.6,6.1,6.6,6.4]},
-    {name:"Itaúna", values:[7.5,7.5,6.5,6.6,6.8]},
-    {name:"Ituiutaba", values:[6.5,6.3,6.0,6.1,6.1]},
-    {name:"João Monlevade", values:[6.4,6.6,5.7,6.3,6.4]},
-    {name:"Lagoa Santa", values:[6.4,6.2,5.9,5.9,6.2]},
-    {name:"Pará de Minas", values:[6.5,6.6,5.9,6.0,6.5]},
-    {name:"Patrocínio", values:[7.4,7.4,7.0,6.6,6.4]},
-    {name:"São João del Rei", values:[6.2,6.2,5.9,6.0,6.7]},
-    {name:"Viçosa", values:[6.0,5.9,5.2,6.2,5.8]}
-  ]
+  iniciais:{
+    label:"Anos Iniciais",
+    yMin:5.0,
+    yMax:7.6,
+    tickMin:5.0,
+    tickMax:7.5,
+    cities:[
+      {name:"Alfenas", values:[6.4,6.2,6.0,6.3,7.1]},
+      {name:"Itajubá", values:[6.9,6.6,6.1,6.6,6.4]},
+      {name:"Itaúna", values:[7.5,7.5,6.5,6.6,6.8]},
+      {name:"Ituiutaba", values:[6.5,6.3,6.0,6.1,6.1]},
+      {name:"João Monlevade", values:[6.4,6.6,5.7,6.3,6.4]},
+      {name:"Lagoa Santa", values:[6.4,6.2,5.9,5.9,6.2]},
+      {name:"Pará de Minas", values:[6.5,6.6,5.9,6.0,6.5]},
+      {name:"Patrocínio", values:[7.4,7.4,7.0,6.6,6.4]},
+      {name:"São João del Rei", values:[6.2,6.2,5.9,6.0,6.7]},
+      {name:"Viçosa", values:[6.0,5.9,5.2,6.2,5.8]}
+    ]
+  },
+  finais:{
+    label:"Anos Finais",
+    yMin:3.8,
+    yMax:6.5,
+    tickMin:4.0,
+    tickMax:6.5,
+    cities:[
+      {name:"Alfenas", values:[6.1,6.4,6.1,null,5.8]},
+      {name:"Itaúna", values:[4.5,5.3,null,4.7,4.9]},
+      {name:"Ituiutaba", values:[5.5,5.2,5.5,5.0,5.0]},
+      {name:"João Monlevade", values:[5.0,5.0,5.5,4.8,5.4]},
+      {name:"Lagoa Santa", values:[4.6,4.0,4.6,4.4,4.8]},
+      {name:"Pará de Minas", values:[4.9,4.9,5.0,4.9,4.8]},
+      {name:"Patrocínio", values:[5.8,5.9,6.2,5.6,5.8]},
+      {name:"São João del Rei", values:[4.7,5.0,4.9,5.2,5.2]},
+      {name:"Viçosa", values:[4.3,4.2,5.2,4.5,4.6]}
+    ]
+  }
 };
 
-let comparePanel = "ranking";
+const COMPARABLE_YEARS=[2017,2019,2021,2023,2025];
+let compareStage="iniciais";
+let comparePanel="ranking";
 
 function compareCompetitionRanks(rows){
-  const sorted=[...rows].sort((a,b)=>b.value-a.value || a.name.localeCompare(b.name,"pt-BR",{sensitivity:"base"}));
+  const sorted=[...rows].sort((a,b)=>{
+    const diff=b.value-a.value;
+    if(diff!==0)return diff;
+    if(a.name==="Lagoa Santa"&&b.name!=="Lagoa Santa")return -1;
+    if(b.name==="Lagoa Santa"&&a.name!=="Lagoa Santa")return 1;
+    return a.name.localeCompare(b.name,"pt-BR",{sensitivity:"base"});
+  });
   let prev=null,rank=0;
   return sorted.map((d,i)=>{
-    if(d.value!==prev) rank=i+1;
+    if(d.value!==prev)rank=i+1;
     prev=d.value;
     return {...d,rank};
   });
 }
 
+function getComparableStats(){
+  const d=COMPARABLE_IDEB[compareStage];
+  const years=COMPARABLE_YEARS;
+  const idx17=years.indexOf(2017),idx19=years.indexOf(2019),idx23=years.indexOf(2023),idx25=years.indexOf(2025);
+  const ls=d.cities.find(c=>c.name==="Lagoa Santa");
+
+  const available23=d.cities.filter(c=>c.values[idx23]!==null);
+  const available25=d.cities.filter(c=>c.values[idx25]!==null);
+  const common=d.cities.filter(c=>c.values[idx23]!==null&&c.values[idx25]!==null);
+  const peersCommon=common.filter(c=>c.name!=="Lagoa Santa");
+
+  const rank23=compareCompetitionRanks(
+    available23.map(c=>({name:c.name,value:c.values[idx23]}))
+  ).find(x=>x.name==="Lagoa Santa").rank;
+
+  const rank25=compareCompetitionRanks(
+    available25.map(c=>({name:c.name,value:c.values[idx25]}))
+  ).find(x=>x.name==="Lagoa Santa").rank;
+
+  const evoRows=common.map(c=>({
+    name:c.name,
+    value:+(c.values[idx25]-c.values[idx23]).toFixed(1)
+  })).sort((a,b)=>b.value-a.value||a.name.localeCompare(b.name,"pt-BR",{sensitivity:"base"}));
+  const evoRank=evoRows.findIndex(x=>x.name==="Lagoa Santa")+1;
+
+  const lsDelta=+(ls.values[idx25]-ls.values[idx23]).toFixed(1);
+  const histLoss=+(ls.values[idx23]-ls.values[idx17]).toFixed(1);
+  const recovery=histLoss<0?Math.round((lsDelta/Math.abs(histLoss))*100):null;
+  const growthSince2017=+(ls.values[idx25]-ls.values[idx17]).toFixed(1);
+  const growthSince2019=+(ls.values[idx25]-ls.values[idx19]).toFixed(1);
+
+  const peer23=peersCommon.reduce((s,c)=>s+c.values[idx23],0)/peersCommon.length;
+  const peer25=peersCommon.reduce((s,c)=>s+c.values[idx25],0)/peersCommon.length;
+  const peerDelta=peer25-peer23;
+
+  const commonMean23=common.reduce((s,c)=>s+c.values[idx23],0)/common.length;
+  const commonMean25=common.reduce((s,c)=>s+c.values[idx25],0)/common.length;
+  const gap23=commonMean23-ls.values[idx23];
+  const gap25=commonMean25-ls.values[idx25];
+  const gapClosed=gap23>0?Math.round(((gap23-gap25)/gap23)*100):0;
+
+  return {
+    d,years,idx17,idx19,idx23,idx25,ls,
+    available23,available25,common,peersCommon,
+    rank23,rank25,evoRows,evoRank,lsDelta,histLoss,recovery,
+    growthSince2017,growthSince2019,
+    peer23,peer25,peerDelta,commonMean23,commonMean25,gap23,gap25,gapClosed
+  };
+}
+
+function renderCompareSummary(){
+  const s=getComparableStats();
+  const cityNames=s.d.cities.map(c=>c.name).join(", ");
+
+  document.getElementById("compareKicker").textContent=`Benchmark demográfico · ${s.d.label}`;
+  document.getElementById("compareGroupNote").textContent=`Grupo: ${cityNames}.`;
+
+  if(compareStage==="iniciais"){
+    document.getElementById("compareCalloutText").textContent=
+      "Em 2025, Lagoa Santa interrompeu a trajetória de queda e estagnação, cresceu acima da média dos municípios comparáveis e deixou a última posição do grupo.";
+  }else{
+    document.getElementById("compareCalloutText").textContent=
+      "Em 2025, Lagoa Santa atingiu o maior IDEB da própria série desde 2017, teve a 2ª maior evolução entre os municípios com dados comparáveis e avançou da última posição em 2023 para o 7º lugar em 2025.";
+  }
+
+  document.getElementById("compareKpiDelta").textContent=`${s.lsDelta>0?"+":""}${fmt(s.lsDelta)}`;
+  document.getElementById("compareKpiDeltaNote").textContent=
+    `IDEB · ${fmt(s.ls.values[s.idx23])} → ${fmt(s.ls.values[s.idx25])}`;
+
+  document.getElementById("compareKpiRank").textContent=`${s.rank23}º → ${s.rank25}º`;
+  document.getElementById("compareKpiRankNote").textContent=
+    compareStage==="iniciais"
+      ? `avanço de 2 posições · ${s.available25.length} cidades`
+      : `2023: ${s.available23.length} cidades · 2025: ${s.available25.length} cidades`;
+
+  document.getElementById("compareKpiEvolutionRank").textContent=`${s.evoRank}ª`;
+  document.getElementById("compareKpiEvolutionNote").textContent=
+    `maior evolução entre ${s.common.length} cidades com dados nos dois anos`;
+
+  if(compareStage==="iniciais"){
+    document.getElementById("compareKpiHistoryLabel").textContent="Recuperação histórica";
+    document.getElementById("compareKpiRecovery").textContent=`${s.recovery}%`;
+    document.getElementById("compareKpiRecoveryNote").textContent=
+      "da perda acumulada de 2017 a 2023";
+  }else{
+    document.getElementById("compareKpiHistoryLabel").textContent="Crescimento desde 2017";
+    document.getElementById("compareKpiRecovery").textContent=`+${fmt(s.growthSince2017)}`;
+    document.getElementById("compareKpiRecoveryNote").textContent=
+      `4,6 → 4,8 · maior nota da série · +${fmt(s.growthSince2019)} desde 2019`;
+  }
+}
+
 function renderCompareTrend(){
+  const s=getComparableStats();
   const grid=document.getElementById("compareGrid");
   const series=document.getElementById("compareSeries");
   const labels=document.getElementById("compareChartLabels");
@@ -1323,12 +1500,11 @@ function renderCompareTrend(){
 
   grid.innerHTML="";series.innerHTML="";labels.innerHTML="";
   const W=840,H=390,left=48,right=34,top=24,bottom=42;
-  const yMin=5.0,yMax=7.6;
-  const years=COMPARABLE_IDEB.years;
+  const years=s.years;
   const x=i=>left+i*((W-left-right)/(years.length-1));
-  const y=v=>top+(yMax-v)*((H-top-bottom)/(yMax-yMin));
+  const y=v=>top+(s.d.yMax-v)*((H-top-bottom)/(s.d.yMax-s.d.yMin));
 
-  for(let t=5.0;t<=7.5+.001;t+=.5){
+  for(let t=s.d.tickMin;t<=s.d.tickMax+.001;t+=.5){
     grid.innerHTML+=`<line class="compare-grid-line" x1="${left}" y1="${y(t)}" x2="${W-right}" y2="${y(t)}"></line>`;
     labels.innerHTML+=`<text class="compare-axis" x="${left-9}" y="${y(t)+4}" text-anchor="end">${fmt(t)}</text>`;
   }
@@ -1337,56 +1513,71 @@ function renderCompareTrend(){
     labels.innerHTML+=`<text class="compare-axis" x="${x(i)}" y="${H-bottom+20}" text-anchor="middle">${yr}</text>`;
   });
 
-  COMPARABLE_IDEB.cities.filter(c=>c.name!=="Lagoa Santa").forEach(city=>{
-    const pts=city.values.map((v,i)=>`${x(i)},${y(v)}`).join(" ");
-    series.innerHTML+=`<polyline class="compare-peer-line" points="${pts}"><title>${city.name}</title></polyline>`;
+  const drawPeer=city=>{
+    let segment=[];
+    const flush=()=>{
+      if(segment.length>1){
+        series.innerHTML+=`<polyline class="compare-peer-line" points="${segment.map(p=>`${p.x},${p.y}`).join(" ")}"><title>${city.name}</title></polyline>`;
+      }
+      segment=[];
+    };
     city.values.forEach((v,i)=>{
-      series.innerHTML+=`<circle class="compare-peer-point" cx="${x(i)}" cy="${y(v)}" r="3.2"><title>${city.name} · ${years[i]}: ${fmt(v)}</title></circle>`;
+      if(v===null){flush();return;}
+      const p={x:x(i),y:y(v),v,i};
+      segment.push(p);
+      series.innerHTML+=`<circle class="compare-peer-point" cx="${p.x}" cy="${p.y}" r="3.2"><title>${city.name} · ${years[i]}: ${fmt(v)}</title></circle>`;
     });
+    flush();
+  };
+
+  s.d.cities.filter(c=>c.name!=="Lagoa Santa").forEach(drawPeer);
+
+  const lsPoints=s.ls.values.map((v,i)=>v===null?null:{x:x(i),y:y(v),v,i}).filter(Boolean);
+  if(lsPoints.length>1){
+    series.innerHTML+=`<polyline class="compare-ls-line" points="${lsPoints.map(p=>`${p.x},${p.y}`).join(" ")}"></polyline>`;
+  }
+  lsPoints.forEach(p=>{
+    series.innerHTML+=`<circle class="compare-ls-point" cx="${p.x}" cy="${p.y}" r="5.2"><title>Lagoa Santa · ${years[p.i]}: ${fmt(p.v)}</title></circle>`;
+    labels.innerHTML+=`<text class="compare-ls-label" x="${p.x}" y="${p.y-11}" text-anchor="middle">${fmt(p.v)}</text>`;
   });
 
-  const ls=COMPARABLE_IDEB.cities.find(c=>c.name==="Lagoa Santa");
-  const lsPts=ls.values.map((v,i)=>`${x(i)},${y(v)}`).join(" ");
-  series.innerHTML+=`<polyline class="compare-ls-line" points="${lsPts}"></polyline>`;
-  ls.values.forEach((v,i)=>{
-    series.innerHTML+=`<circle class="compare-ls-point" cx="${x(i)}" cy="${y(v)}" r="5.2"><title>Lagoa Santa · ${years[i]}: ${fmt(v)}</title></circle>`;
-    labels.innerHTML+=`<text class="compare-ls-label" x="${x(i)}" y="${y(v)-11}" text-anchor="middle">${fmt(v)}</text>`;
-  });
-
-  const peers=COMPARABLE_IDEB.cities.filter(c=>c.name!=="Lagoa Santa");
-  const idx23=years.indexOf(2023),idx25=years.indexOf(2025);
-  const peers23=peers.reduce((s,c)=>s+c.values[idx23],0)/peers.length;
-  const peers25=peers.reduce((s,c)=>s+c.values[idx25],0)/peers.length;
-  const peerDelta=peers25-peers23;
-
-  document.getElementById("compareTrendNote").innerHTML=
-    `De 2023 a 2025, Lagoa Santa cresceu <strong>+0,3</strong>, contra <strong>+${fmt(peerDelta)}</strong> na média das outras nove cidades. O município recuperou 60% da perda acumulada entre 2017 e 2023, embora o IDEB de 2025 ainda esteja 0,2 ponto abaixo do patamar de 2017.`;
+  if(compareStage==="iniciais"){
+    document.getElementById("compareTrendNote").innerHTML=
+      `De 2023 a 2025, Lagoa Santa cresceu <strong>+${fmt(s.lsDelta)}</strong>, contra <strong>+${fmt(s.peerDelta)}</strong> na média das outras ${s.peersCommon.length} cidades. O município recuperou <strong>${s.recovery}%</strong> da perda acumulada entre 2017 e 2023, embora o IDEB de 2025 ainda esteja ${fmt(Math.abs(s.ls.values[s.idx25]-s.ls.values[s.idx17]))} ponto abaixo de 2017.`;
+  }else{
+    document.getElementById("compareTrendNote").innerHTML=
+      `De 2023 a 2025, Lagoa Santa cresceu <strong>+${fmt(s.lsDelta)}</strong>, contra <strong>+${fmt(s.peerDelta)}</strong> na média das outras ${s.peersCommon.length} cidades com dados nos dois anos. O resultado de <strong>${fmt(s.ls.values[s.idx25])}</strong> é o maior da série: <strong>+${fmt(s.growthSince2017)}</strong> acima de 2017 e <strong>+${fmt(s.growthSince2019)}</strong> acima de 2019. A distância para a média do grupo comparável caiu cerca de <strong>${s.gapClosed}%</strong>.`;
+  }
 }
 
 function renderCompareSide(){
+  const s=getComparableStats();
   const head=document.getElementById("compareSideHead");
   const root=document.getElementById("compareSideList");
   const foot=document.getElementById("compareSideFoot");
   if(!head||!root||!foot)return;
 
-  const years=COMPARABLE_IDEB.years;
-  const idx23=years.indexOf(2023),idx25=years.indexOf(2025);
-
   if(comparePanel==="ranking"){
-    const ranked=compareCompetitionRanks(COMPARABLE_IDEB.cities.map(c=>({name:c.name,value:c.values[idx25]})));
-    head.textContent="Posição entre os 10 municípios em 2025";
+    const all2025=s.d.cities
+      .filter(c=>c.values[s.idx25]!==null)
+      .map(c=>({name:c.name,value:c.values[s.idx25]}));
+    const ranked=compareCompetitionRanks(all2025);
+    head.textContent=`Posição entre os ${ranked.length} municípios em 2025`;
     root.innerHTML=ranked.map(d=>`
       <div class="compare-row ${d.name==="Lagoa Santa"?"lagoa":""}">
         <div class="compare-row-rank">${d.rank}º</div>
         <div class="compare-row-name" title="${d.name}">${d.name}</div>
         <div class="compare-row-value">${fmt(d.value)}</div>
       </div>`).join("");
-    foot.innerHTML="Lagoa Santa passou do <strong>10º lugar em 2023</strong> para o <strong>8º em 2025</strong>, deixando a última posição do grupo.";
+
+    if(compareStage==="iniciais"){
+      foot.innerHTML="Lagoa Santa passou do <strong>10º lugar em 2023</strong> para o <strong>8º em 2025</strong>, deixando a última posição do grupo.";
+    }else{
+      const full25Rank=ranked.find(x=>x.name==="Lagoa Santa").rank;
+      foot.innerHTML=`Lagoa Santa aparece em <strong>${full25Rank}º lugar em 2025</strong> entre os ${s.available25.length} municípios, empatada com Pará de Minas. Em 2023, era <strong>${s.rank23}º entre ${s.available23.length}</strong> municípios com resultado divulgado.`;
+    }
   }else{
-    const rows=COMPARABLE_IDEB.cities.map(c=>({
-      name:c.name,
-      value:+(c.values[idx25]-c.values[idx23]).toFixed(1)
-    })).sort((a,b)=>b.value-a.value || a.name.localeCompare(b.name,"pt-BR",{sensitivity:"base"}));
+    const rows=s.evoRows;
     head.textContent="Variação do IDEB entre 2023 e 2025";
     root.innerHTML=rows.map((d,i)=>{
       const cls=d.value>0?"up":d.value<0?"down":"";
@@ -1396,11 +1587,17 @@ function renderCompareSide(){
         <div class="compare-row-value ${cls}">${d.value>0?"+":""}${fmt(d.value)}</div>
       </div>`;
     }).join("");
-    foot.innerHTML="Com <strong>+0,3 ponto</strong>, Lagoa Santa teve a <strong>4ª maior evolução</strong> do grupo no ciclo 2023–2025.";
+
+    if(compareStage==="iniciais"){
+      foot.innerHTML=`Com <strong>+${fmt(s.lsDelta)} ponto</strong>, Lagoa Santa teve a <strong>${s.evoRank}ª maior evolução</strong> do grupo no ciclo 2023–2025.`;
+    }else{
+      foot.innerHTML=`Com <strong>+${fmt(s.lsDelta)} ponto</strong>, Lagoa Santa teve a <strong>${s.evoRank}ª maior evolução</strong> entre as ${s.common.length} cidades com dados comparáveis. Alfenas não entra nesta lista porque não possui resultado de 2023.`;
+    }
   }
 }
 
 function renderComparables(){
+  renderCompareSummary();
   renderCompareTrend();
   renderCompareSide();
 }
@@ -1883,6 +2080,18 @@ document.querySelectorAll("[data-school-stage]").forEach(btn=>{
   });
 });
 
+
+document.querySelectorAll("[data-compare-stage]").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    compareStage=btn.dataset.compareStage;
+    document.querySelectorAll("[data-compare-stage]").forEach(b=>{
+      const active=b===btn;
+      b.classList.toggle("active",active);
+      b.setAttribute("aria-selected",active?"true":"false");
+    });
+    renderComparables();
+  });
+});
 
 document.querySelectorAll("[data-compare-panel]").forEach(btn=>{
   btn.addEventListener("click",()=>{
