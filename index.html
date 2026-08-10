@@ -708,6 +708,172 @@
       .compare-callout{padding:13px}
     }
 
+  
+    /* ===== AJUSTE DE TELA CHEIA: POR ESCOLA E PARTICIPAÇÃO ===== */
+
+    @media(min-width:901px){
+      /* POR ESCOLA:
+         linha 1 seletor, linha 2 pódio,
+         linha 3 dois gráficos lado a lado,
+         linha 4 distribuição em faixa inteira. */
+      #schoolsView{
+        overflow:hidden!important;
+        align-content:stretch!important;
+        grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;
+        grid-template-rows:auto auto minmax(0,1fr) auto!important;
+        gap:9px 11px!important;
+      }
+
+      #schoolsView > .school-global-tabs{
+        grid-column:1 / -1;
+        grid-row:1;
+      }
+
+      #schoolsView > .podium-section{
+        grid-column:1 / -1!important;
+        grid-row:2;
+      }
+
+      #schoolsView > #schoolResultsSection{
+        grid-column:1;
+        grid-row:3;
+        min-height:0!important;
+        overflow:auto!important;
+      }
+
+      #schoolsView > #schoolEvolutionRankingSection{
+        grid-column:2;
+        grid-row:3;
+        min-height:0!important;
+        overflow:auto!important;
+      }
+
+      #schoolsView > .school-distribution-section{
+        grid-column:1 / -1!important;
+        grid-row:4;
+        min-height:auto!important;
+        overflow:visible!important;
+      }
+
+      #schoolEvolutionRankingSection .section-head{
+        margin-bottom:7px;
+      }
+      #schoolEvolutionRankingSection .section-desc{
+        font-size:.69rem;
+      }
+      #schoolEvolutionRankingSection .evolution-ranking{
+        gap:3px;
+      }
+      #schoolEvolutionRankingSection .evolution-row{
+        padding:3px 5px;
+      }
+
+      /* Mantém o gráfico de evolução grande o suficiente,
+         mas sem forçar altura que crie vazios na grade. */
+      #schoolsView #idebTrendChart{
+        min-height:190px!important;
+      }
+
+      /* PARTICIPAÇÃO:
+         seletor + relevância em cima e, na última linha,
+         lista e scatter lado a lado. */
+      #participationView{
+        grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;
+        grid-template-rows:auto auto minmax(0,1fr)!important;
+        gap:9px 11px!important;
+        align-items:stretch;
+      }
+
+      #participationView > .school-global-tabs{
+        grid-column:1 / -1;
+        grid-row:1;
+      }
+
+      #participationView > .participation-insights{
+        grid-column:1 / -1!important;
+        grid-row:2;
+      }
+
+      #participationView > .school-participation-card{
+        grid-column:1;
+        grid-row:3;
+        align-self:start;
+        width:100%;
+        overflow:visible!important;
+      }
+
+      #participationView > #participationScatterSection{
+        grid-column:2;
+        grid-row:3;
+        min-height:0!important;
+        height:100%;
+        overflow:hidden!important;
+      }
+
+      /* Restaura uma grade completa e usa a barra como coluna elástica.
+         Ela ocupa todo o espaço restante até a taxa. */
+      #participationView .school-row{
+        display:grid!important;
+        grid-template-columns:minmax(185px,1.45fr) 64px 76px minmax(150px,2.9fr) 58px!important;
+        gap:7px!important;
+        padding:4px 5px!important;
+        align-items:center;
+      }
+
+      #participationView .school-name{
+        font-size:.68rem!important;
+        line-height:1.12;
+      }
+
+      #participationView .school-count{
+        display:block!important;
+        font-size:.65rem!important;
+        white-space:nowrap;
+        text-align:right;
+      }
+
+      #participationView .school-track{
+        width:100%!important;
+        min-width:0!important;
+        height:9px;
+      }
+
+      #participationView .school-rate{
+        font-size:.70rem!important;
+      }
+
+      #participationView .school-bars{
+        width:100%;
+      }
+
+      #participationView .school-participation-card .school-summary{
+        margin-bottom:7px!important;
+      }
+
+      #participationView .participation-over100-wide{
+        margin:7px 0 6px!important;
+      }
+
+      #participationView #participationScatter{
+        width:100%!important;
+        height:100%!important;
+        min-height:320px!important;
+      }
+
+      #participationView .scatter-wrap{
+        height:calc(100% - 76px);
+        min-height:320px;
+      }
+    }
+
+    @media(max-width:900px){
+      /* Em telas menores mantém a leitura horizontal da linha completa. */
+      #participationView .school-row{
+        grid-template-columns:minmax(180px,1.5fr) 64px 74px minmax(150px,2.5fr) 58px;
+        min-width:650px;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -1414,6 +1580,8 @@ function renderSchools(){
     const width = Math.min(rate,110) / 110 * 100;
     return `<div class="school-row">
       <div class="school-name">${name}</div>
+      <div class="school-count" title="Matrículas de referência do Censo Escolar">Censo ${enrolled}</div>
+      <div class="school-count" title="Alunos presentes no Saeb">Presentes ${present}</div>
       <div class="school-track" aria-label="${name}: ${rate.toLocaleString("pt-BR",{minimumFractionDigits:1,maximumFractionDigits:1})}%">
         <div class="school-fill" style="width:${width}%"></div>
       </div>
